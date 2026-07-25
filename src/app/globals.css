@@ -16,6 +16,17 @@
   --accent-contrast: #ffffff;
   --open: #1f6f4a;
   --open-soft: #e9f4ee;
+
+  /* Equinox marka renkleri — tema değişkeni değil, sabit marka değerleri.
+     Kaynak: equinox.sametbasbug.dev. Yalnızca marka yüzeylerinde kullanılır;
+     sitenin kendi paleti bunlardan bağımsızdır. */
+  --eq-night: #080914;
+  --eq-gold: #f6c66a;
+  --eq-cyan: #73d7ff;
+
+  /* Altın, açık zeminde metin olarak okunmuyor (kontrast ~1.8:1). Marka
+     tonunu koruyan koyu bir mürekkep karşılığı gerekiyor. */
+  --eq-gold-ink: #7d5c12;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -34,6 +45,9 @@
     --accent-contrast: #1a1012;
     --open: #5fc28d;
     --open-soft: #17281f;
+
+    /* Koyu zeminde altının kendisi zaten okunuyor. */
+    --eq-gold-ink: #f6c66a;
   }
 }
 
@@ -52,6 +66,10 @@
   --color-accent-contrast: var(--accent-contrast);
   --color-open: var(--open);
   --color-open-soft: var(--open-soft);
+  --color-eq-night: var(--eq-night);
+  --color-eq-gold: var(--eq-gold);
+  --color-eq-cyan: var(--eq-cyan);
+  --color-eq-gold-ink: var(--eq-gold-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

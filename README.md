@@ -1,8 +1,11 @@
-# Model Atlası
+# Equinox Model Atlası
 
 Türkçe yapay zekâ modeli keşif ve karşılaştırma sitesi. Kullanıcılar modelleri
 sağlayıcı, yetenek, lisans ve bağlam penceresine göre filtreler; dörde kadar
 modeli yan yana karşılaştırır; her model için Türkçe bir detay sayfası okur.
+
+Site, Samet Başbuğ'un [Equinox](https://equinox.sametbasbug.dev) ekosistemindeki
+yayın yüzeylerinden biridir.
 
 ## Çalıştırma
 
@@ -56,19 +59,27 @@ src/
     modeller/[slug]/page.tsx Model detay sayfası (statik üretilir)
     karsilastir/page.tsx     Karşılaştırma sayfası (?m=slug&m=slug)
     saglayicilar/page.tsx    Sağlayıcı özetleri
+    hakkinda/page.tsx        Site, veri politikası ve ekosistem bağı
+    icon.svg                 Favicon (Equinox işareti)
+    opengraph-image.png      Paylaşım görseli — üretilmiş, depoya işlenir
+    apple-icon.png           iOS ana ekran simgesi — üretilmiş
   components/
     ModelExplorer.tsx        Arama, filtreler, kart ızgarası, seçim çubuğu
     ModelCard.tsx            Tek model kartı
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
+    EquinoxMark.tsx          Marka işareti (başlık, altbilgi, hakkında)
     ui.tsx                   Badge, ProviderTag, Stat
   data/
     types.ts                 Model ve Provider tipleri
     models.ts                ⭐ Tüm model verisi burada
     providers.ts             Sağlayıcı bilgileri
   lib/
-    constants.ts             MAX_COMPARE
+    brand.ts                 Equinox ad ve adres sabitleri
+    constants.ts             MAX_COMPARE, SITE_URL
     format.ts                tr-TR sayı, fiyat ve tarih biçimlendirme
     labels.ts                Yetenek/kip/lisans Türkçe etiketleri
+tools/brand/                 OG görseli ve Apple simgesinin üreteç kaynakları
+scripts/build-brand-images.sh  Bu görselleri yeniden üretir
 ```
 
 ## Yeni model ekleme
@@ -104,6 +115,40 @@ güncellenir; başka bir yeri elle değiştirmeniz gerekmez.
 
 Yeni bir sağlayıcı ekliyorsanız önce `src/data/providers.ts` dosyasına kaydını
 ve `ProviderId` birleşim tipine kimliğini ekleyin.
+
+## Marka
+
+Görsel kimlik ekosistemden **devralınmadı**, yalnızca marka bağı taşındı.
+Equinox'un kendi sayfası koyu ve atmosferiktir; Model Atlası ise fiyat sütunları
+ve karşılaştırma tabloları olan veri yoğun bir sitedir. Ortak olan işaret, altın
+vurgu ve ad kilidi — zemin paleti değil.
+
+Ekosistem bağının durduğu yerler:
+
+- **İşaret** — güneş/ay tutulması ve iki yörünge yayı. Geometri
+  `equinox.sametbasbug.dev`'deki işaretle aynıdır; tek fark alttaki yayın rengi
+  (hub'da menekşe, burada sitenin kendi vurgu tonu) — böylece sekmede hub'la
+  karışmaz. Aynı çizim dört yerde durur: [EquinoxMark.tsx](src/components/EquinoxMark.tsx),
+  `app/icon.svg` ve `tools/brand/` altındaki iki üreteç. Biri değişirse hepsi
+  değişmeli.
+- **Ad kilidi** — başlıkta "EQUINOX" üstte küçük ve altın, "Model Atlası" altta
+  baskın. Tam ad `SITE_NAME` sabitindedir ve tüm başlık/OG etiketlerini besler.
+- **Renkler** — Equinox altın/camgöbeği değerleri `globals.css` içinde
+  `--eq-*` belirteçleri olarak durur ve yalnızca marka yüzeylerinde kullanılır.
+
+Adlar ve adresler tek bir yerde: [src/lib/brand.ts](src/lib/brand.ts).
+
+### Marka görsellerini yeniden üretmek
+
+Paylaşım görseli ve iOS simgesi depoya **statik PNG olarak işlenir**, her
+derlemede üretilmez. Değiştirmek için `tools/brand/` altındaki kaynağı düzenleyip:
+
+```bash
+./scripts/build-brand-images.sh
+```
+
+Betiğin ne yaptığı ve neden gerektiği kendi başlığında açıklanmıştır; özeti
+"Bilinçli tasarım kararları" bölümündedir. Üretilen PNG'ler depoya işlenmelidir.
 
 ## Veri bakımı
 
@@ -152,6 +197,22 @@ tercih edilmiştir.
 - **`trailingSlash: true`.** Her rota `dizin/index.html` olarak üretilir; statik
   barındırmada uzantısız adreslerin çözümü bu şekilde garanti altına alınır.
   Sayfa içi bağlantılar da bu yüzden `/karsilastir/?m=…` biçiminde yazılır.
+- **OG görseli üreteç değil, statik dosya.** `opengraph-image.tsx` `src/app/`
+  altında dursaydı Next onu her derlemede **uzantısız** bir rota
+  (`out/opengraph-image`) olarak üretirdi. GitHub Pages içerik tipini dosya
+  uzantısından belirlediği için bu dosya `application/octet-stream` olarak
+  sunulur ve paylaşım önizlemeleri onu görsel saymaz. Üreteçler bu yüzden
+  `tools/brand/` altında tutulur, çıktı PNG olarak depoya işlenir ve
+  `out/opengraph-image.png` doğru içerik tipiyle yayına çıkar. Görselde model
+  sayısı gibi veriyle değişen bir bilgi de bu yüzden yok — statik bir dosya
+  katalog büyüdükçe bayatlardı.
+- **Marka adı CSS ile büyütülmez.** Belge `lang="tr"` olduğu için tarayıcı
+  `text-transform: uppercase` uygularken Türkçe kuralını izler ve `i` harfini
+  noktalı `İ` yapar: "Equinox" → "EQUİNOX". Türkçe sözcükler için doğru olan bu
+  davranış marka adı için yanlış olduğundan büyük harfli biçim `brand.ts`
+  içinde harfi harfine yazılıdır. Sayfa içindeki Türkçe üst başlıklar
+  (`TÜRKÇE YAPAY ZEKÂ MODEL REHBERİ`) CSS ile büyütülmeye devam eder — orada
+  noktalı `İ` istenen sonuçtur.
 
 ## Yapılmayanlar
 
