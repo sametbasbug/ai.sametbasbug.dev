@@ -12,10 +12,31 @@ const GOOGLE_SRC = {
   url: "https://ai.google.dev/gemini-api/docs/pricing",
   verifiedAt: "2026-07-25",
 };
-const BENCHLM_SRC = {
-  url: "https://benchlm.ai/llm-pricing",
+const XAI_SRC = {
+  url: "https://docs.x.ai/docs/pricing",
   verifiedAt: "2026-07-25",
 };
+const DEEPSEEK_SRC = {
+  url: "https://api-docs.deepseek.com/quick_start/pricing",
+  verifiedAt: "2026-07-25",
+};
+const MISTRAL_LARGE_SRC = {
+  url: "https://docs.mistral.ai/models/model-cards/mistral-large-3-25-12",
+  verifiedAt: "2026-07-25",
+};
+const MISTRAL_SMALL_SRC = {
+  url: "https://docs.mistral.ai/models/model-cards/mistral-small-4-0-26-03",
+  verifiedAt: "2026-07-25",
+};
+const ALIBABA_SRC = {
+  url: "https://www.alibabacloud.com/help/en/model-studio/model-pricing",
+  verifiedAt: "2026-07-25",
+};
+const META_SRC = {
+  url: "https://www.llama.com/docs/model-cards-and-prompt-formats/llama4/",
+  verifiedAt: "2026-07-25",
+};
+
 const KUMRU_SRC = {
   url: "https://medium.com/vngrs/kumru-llm-34d1628cfd93",
   verifiedAt: "2026-07-25",
@@ -814,7 +835,12 @@ export const models: Model[] = [
     apiId: "grok-4.5",
     license: "kapali",
     contextWindow: 500_000,
-    pricing: { input: 2, output: 6 },
+    pricing: {
+      input: 2,
+      output: 6,
+      cachedInput: 0.3,
+      note: "İstem 200 bin token'ı aştığında tüm token'lar iki katı ücretlendirilir: 4 $ girdi, 12 $ çıktı",
+    },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
     capabilities: [
@@ -825,18 +851,18 @@ export const models: Model[] = [
       "uzun-baglam",
     ],
     summary:
-      "xAI'ın amiral gemisi; X platformu verisine gerçek zamanlı erişimle öne çıkar.",
+      "xAI'ın amiral gemisi; isteğe bağlı X araması ile güncel veriye erişebilir.",
     description:
-      "Grok 4.5, xAI'ın güncel amiral gemisidir. En belirgin farkı X (Twitter) verisine gerçek zamanlı erişimidir — güncel olay takibi, sosyal medya analizi ve trend tespiti gerektiren uygulamalarda benzersiz bir konumu vardır. Çıktı fiyatı 6 $/1M ile bu yetenek seviyesindeki rakiplerine göre düşüktür.",
+      "Grok 4.5, xAI'ın güncel amiral gemisidir. Model kendi başına güncel olayları bilmez — bilgisi eğitim verisiyle sınırlıdır (kesim tarihi 1 Şubat 2026). Ayırt edici yanı, sunucu tarafında etkinleştirilebilen X araması aracıdır: açıldığında X gönderilerini, profillerini ve konu başlıklarını sorgulayarak yanıt üretir. Bu araç ayrıca ücretlendirilir (1.000 çağrı başına 5 $). Çıktı fiyatı 6 $/1M ile bu yetenek seviyesindeki rakiplerine göre düşüktür.",
     strengths: [
-      "X verisine gerçek zamanlı erişim — rakiplerinde yok",
+      "X araması aracı — rakiplerinde doğrudan karşılığı yok",
       "Yetenek seviyesine göre düşük çıktı fiyatı",
-      "Güncel olaylarda güçlü performans",
+      "Yapılandırılabilir akıl yürütme derinliği",
     ],
     weaknesses: [
       "500 bin token bağlam, Grok 4.3'ten dar",
-      "Ekosistem ve araç desteği rakiplerine göre sınırlı",
-      "Kurumsal uyumluluk sertifikaları daha az",
+      "Güncel veri için ayrıca ücretli arama aracı gerekir",
+      "200 bin token üstünde fiyat ikiye katlanır",
     ],
     useCases: [
       "Sosyal medya izleme ve trend analizi",
@@ -844,7 +870,7 @@ export const models: Model[] = [
       "Marka itibarı analizi",
     ],
     docsUrl: "https://docs.x.ai",
-    source: BENCHLM_SRC,
+    source: XAI_SRC,
   },
   {
     slug: "grok-4-3",
@@ -853,7 +879,12 @@ export const models: Model[] = [
     apiId: "grok-4.3",
     license: "kapali",
     contextWindow: 1_000_000,
-    pricing: { input: 1.25, output: 2.5 },
+    pricing: {
+      input: 1.25,
+      output: 2.5,
+      cachedInput: 0.2,
+      note: "İstem 200 bin token'ı aştığında tüm token'lar iki katı ücretlendirilir: 2,50 $ girdi, 5 $ çıktı",
+    },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
     capabilities: [
@@ -866,15 +897,15 @@ export const models: Model[] = [
     summary:
       "1 milyon token bağlamı 2,50 $ çıktı fiyatıyla sunan çok agresif bir fiyat/performans noktası.",
     description:
-      "Grok 4.3, 1 milyon token bağlam penceresini yalnızca 2,50 $/1M çıktı fiyatıyla birleştirir. Bu, listedeki en iyi bağlam/fiyat oranlarından biridir. Uzun belgelerle çalışan ancak bütçesi kısıtlı ekipler için güçlü bir aday.",
+      "Grok 4.3, 1 milyon token bağlam penceresini 2,50 $/1M çıktı fiyatıyla birleştirir. Bu, listedeki en iyi bağlam/fiyat oranlarından biridir. Ancak dikkat: istem 200 bin token'ı geçtiğinde fiyat ikiye katlanır, yani asıl uzun bağlam senaryosunda 5 $/1M ödersiniz. Uzun belgelerle çalışan ve bütçesi kısıtlı ekipler için yine de güçlü bir aday. Toplu işlemde ayrıca %20 indirim uygulanır.",
     strengths: [
-      "1 milyon bağlamı çok düşük çıktı fiyatına sunar",
-      "X verisine erişim imkânı",
-      "Genel amaçlı işlerde dengeli performans",
+      "1 milyon bağlamı düşük çıktı fiyatına sunar",
+      "İsteğe bağlı X araması aracına erişim",
+      "Toplu işlemde %20 indirim",
     ],
     weaknesses: [
       "Grok 4.5'e göre akıl yürütme daha zayıf",
-      "Üçüncü parti araç entegrasyonları sınırlı",
+      "200 bin token üstünde fiyat ikiye katlanır",
       "Belgelendirme rakiplerine göre daha az olgun",
     ],
     useCases: [
@@ -883,40 +914,7 @@ export const models: Model[] = [
       "Yüksek hacimli metin üretimi",
     ],
     docsUrl: "https://docs.x.ai",
-    source: BENCHLM_SRC,
-  },
-  {
-    slug: "grok-4-1-fast",
-    name: "Grok 4.1 Fast",
-    providerId: "xai",
-    apiId: "grok-4.1-fast",
-    license: "kapali",
-    contextWindow: 2_000_000,
-    pricing: { input: 0.2, output: 0.5 },
-    inputModalities: ["metin"],
-    outputModalities: ["metin"],
-    capabilities: ["arac-kullanimi", "uzun-baglam"],
-    summary:
-      "2 milyon token bağlamı 0,50 $ çıktı fiyatıyla sunar — listedeki en uç bağlam/fiyat oranı.",
-    description:
-      "Grok 4.1 Fast, Gemini 3.1 Pro ile aynı 2 milyon token bağlam penceresini sunar ancak fiyatı onda birinden azdır. Derin akıl yürütme yerine devasa metin yığınlarını ucuza taramaya odaklanan iş akışları için tasarlanmıştır.",
-    strengths: [
-      "Listedeki en iyi bağlam/fiyat oranı (2M token, 0,20 $ girdi)",
-      "Çok düşük gecikme",
-      "Büyük arşiv taramaları için ideal",
-    ],
-    weaknesses: [
-      "Akıl yürütme yeteneği çok sınırlı",
-      "Görsel girdi desteklemez",
-      "Nitelikli metin üretimine uygun değil",
-    ],
-    useCases: [
-      "Devasa belge arşivlerinde arama ve çıkarım",
-      "Log ve kayıt analizi",
-      "Büyük veri kümelerinde ön eleme",
-    ],
-    docsUrl: "https://docs.x.ai",
-    source: BENCHLM_SRC,
+    source: XAI_SRC,
   },
 
   // ----------------------------------------------------------------- DeepSeek
@@ -927,10 +925,12 @@ export const models: Model[] = [
     apiId: "deepseek-v4-pro",
     license: "kapali",
     contextWindow: 1_000_000,
+    maxOutput: 384_000,
     pricing: {
       input: 0.435,
       output: 0.87,
-      note: "Önbellek isabetinde girdi maliyeti 50-100 kat düşer",
+      cachedInput: 0.003625,
+      note: "Önbellek isabetinde girdi maliyeti 120 kat düşer",
     },
     inputModalities: ["metin"],
     outputModalities: ["metin"],
@@ -961,7 +961,7 @@ export const models: Model[] = [
       "Deneysel ve akademik projeler",
     ],
     docsUrl: "https://api-docs.deepseek.com",
-    source: BENCHLM_SRC,
+    source: DEEPSEEK_SRC,
   },
   {
     slug: "deepseek-v4-flash",
@@ -970,10 +970,12 @@ export const models: Model[] = [
     apiId: "deepseek-v4-flash",
     license: "kapali",
     contextWindow: 1_000_000,
+    maxOutput: 384_000,
     pricing: {
       input: 0.14,
       output: 0.28,
-      note: "Önbellek isabetinde girdi maliyeti 50-100 kat düşer",
+      cachedInput: 0.0028,
+      note: "Önbellek isabetinde girdi maliyeti 50 kat düşer",
     },
     inputModalities: ["metin"],
     outputModalities: ["metin"],
@@ -998,7 +1000,7 @@ export const models: Model[] = [
       "Toplu veri işleme",
     ],
     docsUrl: "https://api-docs.deepseek.com",
-    source: BENCHLM_SRC,
+    source: DEEPSEEK_SRC,
   },
 
   // --------------------------------------------------------------------- Meta
@@ -1040,7 +1042,7 @@ export const models: Model[] = [
       "Devasa bağlam gerektiren araştırma çalışmaları",
     ],
     docsUrl: "https://www.llama.com",
-    source: BENCHLM_SRC,
+    source: META_SRC,
   },
   {
     slug: "llama-4-maverick",
@@ -1081,7 +1083,7 @@ export const models: Model[] = [
       "Sağlayıcı bağımlılığından kaçınmak isteyen projeler",
     ],
     docsUrl: "https://www.llama.com",
-    source: BENCHLM_SRC,
+    source: META_SRC,
   },
 
   // ------------------------------------------------------------------ Mistral
@@ -1089,8 +1091,8 @@ export const models: Model[] = [
     slug: "mistral-large-3",
     name: "Mistral Large 3",
     providerId: "mistral",
-    apiId: "mistral-large-3",
-    license: "kapali",
+    apiId: "mistral-large-2512",
+    license: "acik-agirlik",
     contextWindow: 256_000,
     pricing: { input: 0.5, output: 1.5 },
     inputModalities: ["metin", "gorsel"],
@@ -1122,14 +1124,14 @@ export const models: Model[] = [
       "Avrupa dilleri ağırlıklı içerik işleme",
     ],
     docsUrl: "https://docs.mistral.ai",
-    source: BENCHLM_SRC,
+    source: MISTRAL_LARGE_SRC,
   },
   {
     slug: "mistral-small-4",
     name: "Mistral Small 4",
     providerId: "mistral",
-    apiId: "mistral-small-4",
-    license: "kapali",
+    apiId: "mistral-small-2603",
+    license: "acik-agirlik",
     contextWindow: 256_000,
     pricing: { input: 0.15, output: 0.6 },
     inputModalities: ["metin", "gorsel"],
@@ -1155,18 +1157,22 @@ export const models: Model[] = [
       "Ekonomik özetleme hatları",
     ],
     docsUrl: "https://docs.mistral.ai",
-    source: BENCHLM_SRC,
+    source: MISTRAL_SMALL_SRC,
   },
 
   // ------------------------------------------------------------------ Alibaba
   {
-    slug: "qwen-3-5-plus",
-    name: "Qwen3.5 Plus",
+    slug: "qwen-3-7-plus",
+    name: "Qwen3.7 Plus",
     providerId: "alibaba",
-    apiId: "qwen3.5-plus",
+    apiId: "qwen3.7-plus",
     license: "kapali",
     contextWindow: 1_000_000,
-    pricing: { input: 0.4, output: 2.4 },
+    pricing: {
+      input: 0.4,
+      output: 1.6,
+      note: "İstem 256 bin token'ı aştığında fiyat yükselir: 1,20 $ girdi, 4,80 $ çıktı. Şu anda liste fiyatına geçici %20 indirim uygulanıyor",
+    },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
     capabilities: [
@@ -1178,35 +1184,39 @@ export const models: Model[] = [
       "onbellekleme",
     ],
     summary:
-      "Alibaba'nın dengeli katmanı; 1 milyon bağlamı düşük fiyatla ve güçlü çok dilli destekle sunar.",
+      "Alibaba'nın dengeli katmanı; 1 milyon bağlam ve tam araç desteğini düşük fiyatla birleştirir.",
     description:
-      "Qwen3.5 Plus, Alibaba'nın orta-üst katman modelidir. 1 milyon token bağlam penceresini 0,40 $ / 2,40 $ fiyatlarıyla sunar. Qwen ailesi çok dilli görevlerde güçlüdür ve açık ağırlıklı sürümleriyle birlikte esnek bir geçiş yolu sağlar.",
+      "Qwen3.7 Plus, Alibaba'nın dengeli katmanıdır ve sağlayıcının kendi karşılaştırma tablosunda GPT-5.4, Claude Sonnet 4.6 ve Gemini 3 Pro'nun muadili olarak konumlandırılır. 1 milyon token bağlam penceresini tam araç çağırma desteğiyle sunar; Alibaba onu sohbet botları, içerik üretimi, özetleme ve belge işleme için başlangıç noktası olarak önerir. Fiyatın 256 bin token üstünde üç katına çıktığını hesaba katın — asıl uzun bağlam senaryosunda maliyet 1,20 $ / 4,80 $ olur.",
     strengths: [
-      "1 milyon bağlamı düşük fiyata sunar",
-      "Güçlü çok dilli performans",
-      "Açık ağırlıklı Qwen sürümlerine geçiş kolaylığı",
+      "1 milyon bağlamı tam araç desteğiyle düşük fiyata sunar",
+      "Alibaba'nın kendi eşleştirmesinde Sonnet/Gemini Pro katmanında",
+      "Bağlam önbelleklemede indirim uygulanır",
     ],
     weaknesses: [
+      "256 bin token üstünde fiyat üç katına çıkar",
       "Veri Çin'de işlenir — uyumluluk riski",
-      "Batılı sağlayıcılara göre araç ekosistemi dar",
       "Türkçe performansı için ayrı test gerekir",
     ],
     useCases: [
-      "Çok dilli içerik üretimi",
+      "Çok dilli içerik üretimi ve özetleme",
+      "Büyük kod tabanlarında ajan destekli çalışma",
       "Maliyet duyarlı uzun bağlam işleri",
-      "Asya pazarına yönelik uygulamalar",
     ],
-    docsUrl: "https://qwen.ai",
-    source: BENCHLM_SRC,
+    docsUrl: "https://www.alibabacloud.com/help/en/model-studio/text-generation-model/",
+    source: ALIBABA_SRC,
   },
   {
-    slug: "qwen-3-5-flash",
-    name: "Qwen3.5 Flash",
+    slug: "qwen-3-7-flash",
+    name: "Qwen3.7 Flash",
     providerId: "alibaba",
-    apiId: "qwen3.5-flash",
+    apiId: "qwen3.7-flash",
     license: "kapali",
     contextWindow: 1_000_000,
-    pricing: { input: 0.1, output: 0.4 },
+    pricing: {
+      input: 0.03,
+      output: 0.13,
+      note: "Bu fiyat 32 bin token'a kadar geçerlidir. 32-256 bin: 0,10 $ / 0,40 $. 256 bin-1 milyon: 0,20 $ / 0,80 $",
+    },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
     capabilities: [
@@ -1214,28 +1224,29 @@ export const models: Model[] = [
       "gorsel-anlama",
       "uzun-baglam",
       "onbellekleme",
+      "toplu-islem",
     ],
     summary:
-      "1 milyon token bağlamı 0,10 $ girdi fiyatıyla sunan, listedeki en ucuz kapalı modellerden biri.",
+      "Kısa istemlerde listedeki en ucuz model; fiyat istem uzadıkça üç kademede yükselir.",
     description:
-      "Qwen3.5 Flash, kapalı modeller arasında bağlam/fiyat oranı en yüksek seçeneklerden biridir. 1 milyon token bağlam penceresini 0,10 $ girdi ve 0,40 $ çıktı fiyatıyla sunar. Görsel girdiyi de bu fiyata desteklemesi dikkat çekicidir.",
+      "Qwen3.7 Flash, Alibaba'nın hafif ve düşük maliyetli katmanıdır; sağlayıcının kendi eşleştirmesinde GPT-5.4-mini, Claude Haiku 4.5 ve Gemini 3.1 Flash ile aynı gruptadır. Fiyatlandırması üç kademelidir ve bu modeli değerlendirirken en kritik nokta budur: 32 bin token'a kadar 0,03 $ / 0,13 $ ile listenin en ucuzudur, ancak 1 milyon token'lık bir istemde 0,20 $ / 0,80 $ öder — yani yaklaşık altı katı. Kısa ve yüksek hacimli isteklerde çok verimli, uzun bağlamda ise avantajı belirgin biçimde azalır. Toplu işlemde ayrıca %50 indirim uygulanır.",
     strengths: [
-      "Kapalı modeller arasında en düşük fiyatlardan biri",
-      "1 milyon token bağlam ve görsel girdi desteği",
-      "Yüksek hacimli işlerde çok verimli",
+      "Kısa istemlerde listedeki en düşük fiyat",
+      "1 milyon bağlam ve görsel girdi desteği",
+      "Toplu işlemde %50, önbelleklemede ek indirim",
     ],
     weaknesses: [
-      "Akıl yürütme yeteneği sınırlı",
+      "Fiyat üç kademede yükselir — uzun bağlamda ucuzluğu kaybolur",
+      "Akıl yürütme yeteneği Plus katmanının gerisinde",
       "Veri Çin'de işlenir",
-      "Karmaşık kod görevlerinde zayıf",
     ],
     useCases: [
+      "Yüksek hacimli kısa istekler ve sınıflandırma",
       "Ekonomik görsel etiketleme",
-      "Yüksek hacimli çeviri ve özetleme",
-      "Maliyet baskısı yüksek prototipler",
+      "Maliyet duyarlı çeviri ve özetleme",
     ],
-    docsUrl: "https://qwen.ai",
-    source: BENCHLM_SRC,
+    docsUrl: "https://www.alibabacloud.com/help/en/model-studio/text-generation-model/",
+    source: ALIBABA_SRC,
   },
 
   // -------------------------------------------------------------------- VNGRS

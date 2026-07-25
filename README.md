@@ -163,17 +163,53 @@ Bu depodaki veri **25 Temmuz 2026** tarihinde şu kaynaklardan derlenmiştir:
 | Anthropic | `platform.claude.com/docs/en/about-claude/models/overview` |
 | OpenAI | `developers.openai.com/api/docs/pricing` |
 | Google | `ai.google.dev/gemini-api/docs/pricing` |
-| xAI, DeepSeek, Meta, Mistral, Alibaba | `benchlm.ai/llm-pricing` (toplayıcı) |
+| xAI | `docs.x.ai/docs/pricing` |
+| DeepSeek | `api-docs.deepseek.com/quick_start/pricing` |
+| Mistral | `docs.mistral.ai` model kartları (model başına ayrı) |
+| Alibaba | `alibabacloud.com/help/en/model-studio/model-pricing` |
+| Meta | `llama.com/docs/model-cards-and-prompt-formats/llama4/` |
 | VNGRS (Kumru) | `medium.com/vngrs/kumru-llm-34d1628cfd93` |
 
-Anthropic, OpenAI ve Google verileri sağlayıcının kendi resmî sayfasından
-doğrulanmıştır. Diğer sağlayıcılar için üçüncü parti bir toplayıcı
-kullanılmıştır; bunları resmî fiyat sayfalarından teyit etmek listedeki ilk
-iyileştirme adımıdır.
+**Katalogdaki her modelin verisi sağlayıcının kendi resmî sayfasından
+doğrulanmıştır.** Üçüncü parti toplayıcı kullanılmamaktadır; bu kural yeni model
+eklerken de korunmalıdır. Sağlayıcının kendi sayfasında bulamadığınız bir modeli
+toplayıcıdan alıp eklemeyin — bulunamıyor olması genellikle modelin emekliye
+ayrıldığı anlamına gelir.
+
+Nitekim ilk doğrulama turunda Grok 4.1 Fast bu şekilde katalogdan çıkarıldı:
+xAI'ın fiyat sayfasında ve model dokümantasyonunda yer almıyordu.
 
 Bazı modellerin `maxOutput` değeri resmî sayfada belirtilmediği için boş
 bırakılmıştır ve arayüzde "—" olarak görünür. Tahmin yazmak yerine boş bırakmak
 tercih edilmiştir.
+
+### Kademeli fiyatlandırma
+
+Bazı sağlayıcılar istem uzunluğuna göre farklı fiyat uygular ve veri modeli tek
+bir girdi/çıktı fiyatı tuttuğu için bunu doğrudan ifade edemez:
+
+- **xAI** — istem 200 bin token'ı aştığında *tüm* token'lar iki katı
+  ücretlendirilir.
+- **Alibaba** — Qwen3.7 Plus'ta 256 bin token üstünde fiyat üç katına çıkar;
+  Qwen3.7 Flash'ta üç kademe vardır (32 bin ve 256 bin sınırlarında).
+
+Bu durumlarda **taban katman** fiyatı gösterilir ve istisna `pricing.note`
+alanına yazılır; not hem karşılaştırma tablosunda hem detay sayfasında görünür.
+Yeni bir model eklerken sağlayıcının kademeli fiyatı olup olmadığına bakın —
+yalnızca taban fiyatı yazmak uzun bağlam senaryosunda kullanıcıyı yanıltır.
+
+**Bilinen sınırlama:** ana sayfadaki "en düşük çıktı fiyatı" istatistiği taban
+katmanları karşılaştırır. Şu anda Qwen3.7 Flash'ı (0,13 $, yalnızca 32 bin
+token'a kadar) DeepSeek V4 Flash'ın önüne koyuyor (0,28 $, 1 milyona kadar sabit).
+Bunu düzgün çözmek `pricing` alanına yapısal bir kademe listesi eklemeyi
+gerektirir; maliyet hesaplayıcı yapılırken ele alınmak üzere ertelendi.
+
+### Lisans ile fiyat birbirinden bağımsızdır
+
+"Açık ağırlıklı" bir modelin barındırılan API fiyatı olabilir. Mistral Large 3
+ve Mistral Small 4 hem açık ağırlıklıdır hem de Mistral'ın kendi API'sinde
+ücretlidir; Llama 4 modellerinde ise bir fiyat yazılmamıştır çünkü Meta
+barındırma sunmaz. `license` alanını fiyatın varlığına bakarak doldurmayın.
 
 ## Bilinçli tasarım kararları
 
