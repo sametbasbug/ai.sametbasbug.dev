@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------- tema --- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --surface-2: #f2f0ec;
+  --border: #e2ded7;
+  --border-strong: #cbc5ba;
+  --text: #1a1815;
+  --text-muted: #6d675e;
+  --text-faint: #948d82;
+  --accent: #b21e35;
+  --accent-hover: #8f1829;
+  --accent-soft: #fceff1;
+  --accent-contrast: #ffffff;
+  --open: #1f6f4a;
+  --open-soft: #e9f4ee;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --bg: #131211;
+    --surface: #1c1a18;
+    --surface-2: #24211e;
+    --border: #322e2a;
+    --border-strong: #464039;
+    --text: #f0ede8;
+    --text-muted: #a49c91;
+    --text-faint: #7c746a;
+    --accent: #f2637a;
+    --accent-hover: #f8899b;
+    --accent-soft: #2c1a1e;
+    --accent-contrast: #1a1012;
+    --open: #5fc28d;
+    --open-soft: #17281f;
   }
 }
 
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-faint: var(--text-faint);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-open: var(--open);
+  --color-open-soft: var(--open-soft);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Odak halkası — klavye kullanıcıları için her yerde tutarlı. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* İnce bir kağıt dokusu: üstte hafif bir ızgara çizgisi. */
+.grid-backdrop {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
