@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import { providerMap } from "@/data/providers";
-import type { License, ProviderId } from "@/data/types";
+import type { License } from "@/data/types";
 import { licenseLabels } from "@/lib/labels";
 
 export function Badge({
@@ -30,21 +29,6 @@ export function LicenseBadge({ license }: { license: License }) {
     <Badge tone={license === "acik-agirlik" ? "open" : "neutral"}>
       {licenseLabels[license]}
     </Badge>
-  );
-}
-
-/** Sağlayıcının vurgu rengini taşıyan küçük nokta + ad. */
-export function ProviderTag({ id }: { id: ProviderId }) {
-  const provider = providerMap[id];
-  return (
-    <span className="inline-flex items-center gap-1.5 text-xs font-medium text-text-muted">
-      <span
-        aria-hidden
-        className="h-2 w-2 shrink-0 rounded-full"
-        style={{ backgroundColor: provider.accent }}
-      />
-      {provider.name}
-    </span>
   );
 }
 

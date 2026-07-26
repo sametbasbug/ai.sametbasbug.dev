@@ -49,44 +49,47 @@ export default function HomePage() {
       <JsonLd data={websiteJsonLd()} />
       <section className="relative overflow-hidden border-b border-border">
         <div aria-hidden className="grid-backdrop absolute inset-0 opacity-60" />
-        <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-16 sm:px-6 sm:pb-16 sm:pt-24">
-          <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+        {/*
+          Giriş bölümü bilerek kısa tutuluyor. Önceki hâlinde ilk model kartı
+          masaüstünde 1029, mobilde 1507 piksel aşağıdaydı — katalog sitesinde
+          ilk ekranda ürün görünmesi gerekir. Başlık, tek cümlelik tanım ve
+          rakam şeridi kalıyor; hepsi bir ekrana sığacak ölçüde.
+        */}
+        <div className="relative mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 sm:pb-10 sm:pt-14">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent">
             Türkçe yapay zekâ model rehberi
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight sm:text-5xl">
+          <h1 className="mt-3 max-w-3xl text-[1.75rem] font-semibold leading-[1.12] tracking-tight sm:text-[2.5rem]">
             Hangi yapay zekâ modeli işinize uygun?
           </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-text-muted">
-            Claude, GPT, Gemini, Grok, Llama, Qwen ve yerli Kumru dahil{" "}
-            {models.length} modeli tek yerde inceleyin. Bağlam penceresi, fiyat
-            ve yeteneklerine göre filtreleyin, dördüne kadar modeli yan yana
-            karşılaştırın.
-          </p>
-
-          <div className="mt-6">
+          <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl leading-relaxed text-text-muted">
+              {models.length} modeli fiyat, bağlam penceresi ve yeteneklerine
+              göre karşılaştırın.
+            </p>
             <Link
               href="/hesaplayici"
-              className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium transition-colors hover:border-border-strong"
+              className="inline-flex shrink-0 items-center gap-2 self-start rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium transition-colors hover:border-border-strong sm:self-auto"
             >
-              Kendi kullanımınıza göre maliyet hesaplayın
+              Maliyet hesaplayıcı
               <span aria-hidden>→</span>
             </Link>
           </div>
 
-          <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
+          <dl className="mt-7 grid grid-cols-3 gap-x-4 gap-y-4 sm:grid-cols-5 sm:gap-x-6">
             {highlights.map((item) => (
               <div key={item.label} className="border-l-2 border-border pl-3">
-                <dt className="text-xs uppercase tracking-wide text-text-faint">
+                <dt className="text-[10px] uppercase tracking-wide text-text-faint">
                   {item.label}
                 </dt>
-                <dd className="mt-1 text-2xl font-semibold tabular-nums">
+                <dd className="mt-0.5 text-lg font-semibold tabular-nums sm:text-xl">
                   {item.value}
                 </dd>
                 {item.hint ? (
                   // `truncate` değil `line-clamp-2`: en düşük fiyat kartının
                   // ipucu artık geçerlilik aralığını da taşıyor ve dar ekranda
                   // tek satıra sığmıyor — kesilirse söylediği şey kayboluyor.
-                  <p className="mt-0.5 line-clamp-2 text-xs text-text-faint">
+                  <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-text-faint">
                     {item.hint}
                   </p>
                 ) : null}
@@ -96,7 +99,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         <ModelExplorer />
       </div>
     </>

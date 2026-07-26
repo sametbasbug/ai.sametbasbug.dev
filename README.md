@@ -65,8 +65,9 @@ src/
     opengraph-image.png      Paylaşım görseli — üretilmiş, depoya işlenir
     apple-icon.png           iOS ana ekran simgesi — üretilmiş
   components/
-    ModelExplorer.tsx        Arama, filtreler, kart ızgarası, seçim çubuğu
-    ModelCard.tsx            Tek model kartı
+    ModelExplorer.tsx        Arama, filtreler, görünüm geçişi, seçim çubuğu
+    ModelList.tsx            Yoğun liste görünümü (varsayılan)
+    ModelCard.tsx            Kart görünümündeki tek model kartı
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
     CostCalculator.tsx       Maliyet hesaplayıcının formu ve sonuç tablosu
     EquinoxMark.tsx          Marka işareti (başlık, altbilgi, hakkında)
@@ -79,11 +80,13 @@ src/
     providers.ts             Sağlayıcı bilgileri
   lib/
     brand.ts                 Equinox ad ve adres sabitleri
+    catalog.ts               Katalogdan türetilen görüntüleme kararları
     constants.ts             MAX_COMPARE, SITE_URL
     format.ts                tr-TR sayı, fiyat ve tarih biçimlendirme
     jsonld.ts                schema.org üreticileri
     labels.ts                Yetenek/kip/lisans Türkçe etiketleri
     pricing.ts               Kademe çözümleme ve maliyet hesabı
+    sort.ts                  Sıralama anahtarları ve karşılaştırıcı
     theme.ts                 Tema anahtarları ve ilk yükleme betiği
 tools/brand/                 OG görseli ve Apple simgesinin üreteç kaynakları
 scripts/build-brand-images.sh  Bu görselleri yeniden üretir
@@ -255,10 +258,43 @@ ve Mistral Small 4 hem açık ağırlıklıdır hem de Mistral'ın kendi API'sin
 ücretlidir; Llama 4 modellerinde ise bir fiyat yazılmamıştır çünkü Meta
 barındırma sunmaz. `license` alanını fiyatın varlığına bakarak doldurmayın.
 
+## Ana sayfanın bilgi hiyerarşisi
+
+2026-07-26'da ana sayfa baştan düzenlendi. Sorun estetik değil, hiyerarşiydi:
+her şey aynı ağırlıkta olduğu için hiçbir şey öne çıkmıyordu. Ölçülen hâli:
+
+| | Önce | Sonra |
+|---|---|---|
+| İlk model kartının konumu (masaüstü) | 1029 px | 550 px |
+| İlk model kartının konumu (mobil) | 1507 px | 703 px |
+| Sayfa yüksekliği (mobil) | 11.737 px | 5.142 px |
+| Ana sayfadaki yuvarlak rozet | 211 | 0 |
+
+Kararlar:
+
+- **Liste varsayılan görünüm.** Kart ızgarası 31 modeli göz ile
+  karşılaştırmaya elverişli değil: her sayı kendi kutusunda durduğu için
+  sütun okuması yapılamıyor. Kart görünümü özet metni gösterdiği için keşif
+  amacıyla seçenek olarak duruyor.
+- **Rozetler veriden ayıklanıyor.** Bir yetenek modellerin yarısından
+  fazlasında varsa gösterilmiyor; ayrıntısı [catalog.ts](src/lib/catalog.ts)
+  içinde. Eşik sabit sayı değil, katalogdan hesaplanıyor.
+- **Sağlayıcı rengi sol şeritte.** Daha önce 8 px'lik bir noktaydı ve sayfada
+  hiç okunmuyordu; listeye ritim veren tek renk artık bu.
+- **Filtre paneli katlanır**, ama etkin filtreler panel kapalıyken de
+  kaldırılabilir çip olarak görünür. Kapalı bir panel kullanıcının neyi
+  süzdüğünü unutmasına yol açmamalı.
+- **Çıktı fiyatının altındaki çizgi logaritmik.** En ucuz çıktı 0,13 $, en
+  pahalısı 180 $; doğrusal ölçekte modellerin neredeyse tamamı aynı görünürdü.
+
 ## Bilinçli tasarım kararları
 
 - **Karşılaştırma seçimi URL'de tutulur** (`/karsilastir?m=a&m=b`). Böylece bir
   karşılaştırma bağlantısı olduğu gibi paylaşılabilir.
+- **Liste satırı dar ekranda ızgara değil, düşey yığın.** CSS ızgarası satırı
+  açıkça belirtilmiş öğeleri (`row-start-1`) otomatik yerleşenlerden önce
+  yerleştirir; ızgarayı dar ekranda kullanınca seçim düğmesi ilk sütunu kapıp
+  model adını sağa itiyordu.
 - **Binlik kısaltma "K"**, "B" değil. Türkçe okuyucu "B"yi "bin", İngilizce
   okuyucu "billion" olarak okuyabildiği için belirsizdi.
 - **Sayılarda daktilo fontu yerine `tabular-nums`**. Sabit genişlikli fontta
