@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { Badge, LicenseBadge, Stat } from "@/components/ui";
 import { getModel, models } from "@/data/models";
 import { providerMap } from "@/data/providers";
@@ -11,6 +12,7 @@ import {
   formatPrice,
   formatTokens,
 } from "@/lib/format";
+import { breadcrumbJsonLd, modelJsonLd } from "@/lib/jsonld";
 import {
   capabilityDescriptions,
   capabilityLabels,
@@ -34,6 +36,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     description: `${model.summary} Bağlam penceresi ${formatContext(
       model.contextWindow,
     )}. Fiyat, yetenekler ve karşılaştırma.`,
+    alternates: { canonical: `/modeller/${model.slug}/` },
   };
 }
 
@@ -62,6 +65,14 @@ export default async function ModelPage({ params }: Params) {
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
+      <JsonLd data={modelJsonLd(model, provider)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Modeller", path: "/" },
+          { name: model.name, path: `/modeller/${model.slug}/` },
+        ])}
+      />
+
       <nav aria-label="Geri" className="mb-8">
         <Link
           href="/"

@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
+import { JsonLd } from "@/components/JsonLd";
 import { ModelExplorer } from "@/components/ModelExplorer";
 import { models } from "@/data/models";
 import { providers } from "@/data/providers";
 import { formatContext, formatPrice } from "@/lib/format";
+import { websiteJsonLd } from "@/lib/jsonld";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
   const priced = models.filter((m) => m.pricing !== null);
@@ -31,6 +38,7 @@ export default function HomePage() {
 
   return (
     <>
+      <JsonLd data={websiteJsonLd()} />
       <section className="relative overflow-hidden border-b border-border">
         <div aria-hidden className="grid-backdrop absolute inset-0 opacity-60" />
         <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-16 sm:px-6 sm:pb-16 sm:pt-24">

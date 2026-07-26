@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { EquinoxMark } from "@/components/EquinoxMark";
+import { JsonLd } from "@/components/JsonLd";
 import { models } from "@/data/models";
 import { providers } from "@/data/providers";
 import {
@@ -9,16 +10,25 @@ import {
   EQUINOX_URL,
   SITE_NAME,
 } from "@/lib/brand";
+import { breadcrumbJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "Hakkında",
   description:
     "Model Atlası'nın ne olduğu, verinin nereden geldiği ve Equinox ekosistemindeki yeri.",
+  alternates: { canonical: "/hakkinda/" },
 };
 
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Modeller", path: "/" },
+          { name: "Hakkında", path: "/hakkinda/" },
+        ])}
+      />
+
       <header className="mb-10">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
           Hakkında
