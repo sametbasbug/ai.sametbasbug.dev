@@ -397,6 +397,15 @@ Belirteç depoya yazılmaz, GitHub deposunda **repository variable** olarak
 değildir (sayfa kaynağında görünür), ama çatalların bizim ölçümümüze veri
 göndermemesi için değişkende tutulur.
 
+Cloudflare tarafında `ai.sametbasbug.dev` **manuel (JS snippet) kurulum** olarak
+tanımlıdır — otomatik kurulum yalnızca trafiği Cloudflare üzerinden geçen
+alanlarda çalışır, bu alan ise GitHub Pages'ten sunuluyor. Belirteci Cloudflare
+panelinde Web Analytics → ilgili site → *Manage site* altında bulursunuz.
+
+Betiğe `type="module"` eklemeyin: Cloudflare panelde snippet'i öyle veriyor ama
+`beacon.min.js` düz bir IIFE, modül sözdizimi içermiyor. `defer` doğru biçim,
+`type="module"` ayrıca lint'in `no-sync-scripts` kuralına takılır.
+
 ## Bilinçli tasarım kararları
 
 - **Karşılaştırma seçimi URL'de tutulur** (`/karsilastir?m=a&m=b`). Böylece bir
