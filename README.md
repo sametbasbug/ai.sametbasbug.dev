@@ -356,6 +356,47 @@ Kararlar:
 - **Çıktı fiyatının altındaki çizgi logaritmik.** En ucuz çıktı 0,13 $, en
   pahalısı 180 $; doğrusal ölçekte modellerin neredeyse tamamı aynı görünürdü.
 
+## Erişilebilirlik
+
+2026-07-26'da altı sayfa türü ve iki tema tarayıcıda denetlendi: başlık sırası,
+etiketsiz form denetimi, adsız bağlantı/düğme, tablo başlığı ve altyazısı,
+`aria-expanded`/`aria-pressed` tutarlılığı, yer imleri, pozitif `tabindex` ve
+metin kontrastı. Bulunan iki kusur giderildi:
+
+- **Başlık düzeyi h1'den h3'e atlıyordu.** Model adları `h3`; araya `h2`
+  girmediği için ekran okuyucunun belge taslağı bozuktu. Sonuç bölümüne
+  `sr-only` bir `h2` eklendi.
+- **`--text-faint` kontrastı 4,5:1 eşiğinin altındaydı** — açık temada 3,12,
+  koyu temada 3,48. Bu belirteç 10-12 piksellik mikro etiketlerde kullanılıyor,
+  yani WCAG'ın "büyük metin" istisnası geçerli değil. Açık tema `#6f6960`,
+  koyu tema `#918980` yapıldı; her ikisi de üç zeminde (`bg`, `surface`,
+  `surface-2`) AA geçiyor.
+
+Renk belirteçlerini değiştirirken **ölçün**. En zorlu zemin `--surface-2`.
+`--text-muted` sınırda değil (açık temada 5,32), ama açık renge doğru
+kaydırmak onu da eşiğin altına indirir.
+
+Denetim sırasında iki yanlış alarm çıktı, not düşüyorum ki tekrar aranmasın:
+başlığın zemini `oklab()` biçiminde döndüğü için düz bir RGB ayrıştırıcısı onu
+koyu sanıp sahte kontrast hatası üretiyor; ve tarayıcı penceresi odakta
+değilken `document.activeElement` doğru öğeyi gösterse bile CSS `:focus`
+eşleşmiyor, dolayısıyla atlama bağlantısı görünmez sanılabiliyor. İkincisi için
+doğru denetim, derlenmiş CSS'te `focus\:not-sr-only:focus` kuralının
+`.sr-only`'den sonra geldiğini doğrulamak.
+
+## Ziyaretçi ölçümü
+
+Çerezsiz ve kimliksiz bir sayaç kullanılır (Cloudflare Web Analytics).
+[Analytics.tsx](src/components/Analytics.tsx) yalnızca
+`NEXT_PUBLIC_CF_ANALYTICS_TOKEN` tanımlıysa betiği çizer; tanımlı değilse
+hiçbir şey eklenmez. Yerel geliştirmede ve depoyu çatallayanlarda sayaç
+kendiliğinden kapalıdır.
+
+Belirteç depoya yazılmaz, GitHub deposunda **repository variable** olarak
+`CF_ANALYTICS_TOKEN` adıyla durur ve derleme adımında okunur. Gizli bir bilgi
+değildir (sayfa kaynağında görünür), ama çatalların bizim ölçümümüze veri
+göndermemesi için değişkende tutulur.
+
 ## Bilinçli tasarım kararları
 
 - **Karşılaştırma seçimi URL'de tutulur** (`/karsilastir?m=a&m=b`). Böylece bir

@@ -12,6 +12,8 @@ import {
   HEMERA_ORBIT_URL,
   NYX_ORBIT_URL,
   ORBIT_URL,
+  REPO_URL,
+  REPORT_URL,
   SITE_NAME,
 } from "@/lib/brand";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
@@ -208,12 +210,53 @@ export default function AboutPage() {
           </h2>
           <p className="mt-3 leading-relaxed text-text-muted">
             Model fiyatları ve kimlikleri sık değişir. Güncel olmayan bir değer
-            görürseniz veya listede olması gereken bir model eksikse, ana blog
-            üzerinden iletişime geçebilirsiniz.
+            görürseniz veya listede olması gereken bir model eksikse
+            bildirebilirsiniz — bildirim formu hangi model, hangi değer ve
+            hangi resmî kaynak olduğunu soruyor; bu üçü olduğunda düzeltme
+            birkaç dakika sürüyor.
           </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <a
+              href={REPORT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition-colors hover:bg-accent-hover"
+            >
+              Düzeltme bildir ↗
+            </a>
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:border-border-strong"
+            >
+              Kaynak kodu ↗
+            </a>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed text-text-muted">
+            Sitenin tamamı açık kaynaktır. Buradaki her değerin hangi adresten
+            ve hangi tarihte alındığı depodaki veri dosyasında yazılıdır;
+            iddiamızı benim sözüme güvenmeden denetleyebilirsiniz.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-xl font-semibold tracking-tight">
+            Ziyaretçi ölçümü
+          </h2>
+          <p className="mt-3 leading-relaxed text-text-muted">
+            Bu site çerez kullanmaz ve ziyaretçi profili oluşturmaz. Yalnızca
+            hangi sayfaların kaç kez görüntülendiğini bilmek için çerezsiz ve
+            kimliksiz bir sayaç çalışır; bireysel ziyaretçiler
+            izlenmediği için sizden onay istenmesine gerek kalmaz. Reklam ve
+            yönlendirme bağlantısı yoktur.
+          </p>
+        </section>
+
+        <section>
           <Link
             href="/"
-            className="mt-6 inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-accent-contrast transition-colors hover:bg-accent-hover"
+            className="inline-block rounded-lg border border-border px-4 py-2 text-sm font-medium transition-colors hover:border-border-strong"
           >
             Model listesine dön
           </Link>

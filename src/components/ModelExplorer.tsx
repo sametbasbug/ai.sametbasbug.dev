@@ -295,6 +295,10 @@ export function ModelExplorer() {
       </section>
 
       {/* ---------------------------------------------------------- sonuç */}
+      {/* Model adları h3; araya h2 girmezse başlık düzeyi h1'den h3'e atlıyor
+          ve ekran okuyucunun belge taslağı bozuluyor. Görsel olarak gerekli
+          değil, çünkü altındaki sayaç zaten ne olduğunu söylüyor. */}
+      <h2 className="sr-only">Model listesi</h2>
       <div className="mt-5 flex items-baseline justify-between">
         <p className="text-sm text-text-muted" aria-live="polite">
           <strong className="font-semibold text-text">{visible.length}</strong>{" "}

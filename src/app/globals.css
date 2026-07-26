@@ -21,7 +21,12 @@
   --border-strong: #cbc5ba;
   --text: #1a1815;
   --text-muted: #6d675e;
-  --text-faint: #948d82;
+  /* Kontrast oranı 4,5:1 eşiğinin altına düşmemeli. Bu belirteç 10-12 piksellik
+     mikro etiketlerde kullanılıyor, yani WCAG'ın "büyük metin" istisnası
+     geçerli değil. Önceki değer (#948d82) sitenin kendi zemininde 3,12
+     veriyordu — ana sayfada otuz bir yerde. Değiştirirken ölçün: en zorlu
+     zemin --surface-2. */
+  --text-faint: #6f6960;
   --accent: #b21e35;
   --accent-hover: #8f1829;
   --accent-soft: #fceff1;
@@ -51,7 +56,8 @@
     --border-strong: #464039;
     --text: #f0ede8;
     --text-muted: #a49c91;
-    --text-faint: #7c746a;
+    /* Koyu temada da 4,5:1 altına inmemeli; önceki değer 3,48 veriyordu. */
+    --text-faint: #918980;
     --accent: #f2637a;
     --accent-hover: #f8899b;
     --accent-soft: #2c1a1e;
@@ -74,7 +80,8 @@
   --border-strong: #464039;
   --text: #f0ede8;
   --text-muted: #a49c91;
-  --text-faint: #7c746a;
+  /* Koyu temada da 4,5:1 altına inmemeli; önceki değer 3,48 veriyordu. */
+  --text-faint: #918980;
   --accent: #f2637a;
   --accent-hover: #f8899b;
   --accent-soft: #2c1a1e;

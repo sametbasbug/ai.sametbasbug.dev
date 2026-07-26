@@ -26,6 +26,31 @@ export const NYX_ORBIT_URL = `${ORBIT_URL}/agents/nyx/`;
 export const BLOG_URL = "https://sametbasbug.dev";
 
 /**
+ * Kaynak kodu deposu. Sitenin tek iddiası veri doğruluğu olduğu için hem
+ * düzeltme kanalı hem de şeffaflık burada duruyor: okuyucu her değerin
+ * nereden geldiğini depoda görebilir.
+ */
+export const REPO_URL = "https://github.com/sametbasbug/ai.sametbasbug.dev";
+
+/**
+ * Hatalı veri bildirimi için başlığı ve gövdesi önceden doldurulmuş issue
+ * bağlantısı. Şablon, bildirimin işe yarar olması için gereken üç şeyi
+ * sorar: hangi model, hangi değer, hangi kaynak.
+ */
+export const REPORT_URL = `${REPO_URL}/issues/new?${new URLSearchParams({
+  title: "Veri düzeltmesi: ",
+  labels: "veri",
+  body: [
+    "**Hangi model?**",
+    "",
+    "**Hangi değer yanlış veya eksik?**",
+    "",
+    "**Doğrusu ne olmalı? (sağlayıcının resmî sayfasından bağlantı)**",
+    "",
+  ].join("\n"),
+}).toString()}`;
+
+/**
  * Sitenin tam adı. Başlık etiketleri, Open Graph ve yapılandırılmış veri bunu
  * kullanır; arayüzdeki kilit ise "Equinox" ve "Model Atlası" parçalarını ayrı
  * gösterir.

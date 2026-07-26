@@ -32,7 +32,12 @@ jobs:
 
       - run: npm run lint
 
+      # Çerezsiz sayaç belirteci. Gizli bir bilgi değil (sayfa kaynağında
+      # görünür) ama depoya yazılmıyor: depo çatallandığında sayaç kendiliğinden
+      # kapansın diye. Değişken tanımlı değilse betik hiç çizilmez.
       - run: npm run build
+        env:
+          NEXT_PUBLIC_CF_ANALYTICS_TOKEN: ${{ vars.CF_ANALYTICS_TOKEN }}
 
       - uses: actions/upload-pages-artifact@v3
         with:

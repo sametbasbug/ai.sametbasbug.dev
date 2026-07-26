@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@/components/Analytics";
 import { DataFreshness } from "@/components/DataFreshness";
 import { InlineScript } from "@/components/InlineScript";
 import { ModelAtlasMark } from "@/components/ModelAtlasMark";
@@ -12,6 +13,7 @@ import {
   BRAND_PREFIX_UPPER,
   EQUINOX_URL,
   ORBIT_URL,
+  REPORT_URL,
   SITE_NAME,
 } from "@/lib/brand";
 import { SITE_URL } from "@/lib/constants";
@@ -183,6 +185,16 @@ export default function RootLayout({
                   kaynak ve doğrulama tarihi belirtilmiştir.
                 </p>
                 <DataFreshness className="mt-3 text-xs text-text-faint" />
+                {/* Düzeltme kanalı her sayfadan erişilebilir olmalı: hatayı
+                    gören okuyucu Hakkında sayfasını aramak zorunda kalmasın. */}
+                <a
+                  href={REPORT_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block text-xs text-text-muted underline-offset-4 hover:text-text hover:underline"
+                >
+                  Hatalı bir değer mi gördünüz? Bildirin ↗
+                </a>
               </div>
               <div className="text-sm">
                 <p className="font-medium text-text">Equinox ağı</p>
@@ -222,6 +234,8 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+
+        <Analytics />
       </body>
     </html>
   );
