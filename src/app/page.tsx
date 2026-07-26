@@ -83,7 +83,10 @@ export default function HomePage() {
                   {item.value}
                 </dd>
                 {item.hint ? (
-                  <p className="mt-0.5 truncate text-xs text-text-faint">
+                  // `truncate` değil `line-clamp-2`: en düşük fiyat kartının
+                  // ipucu artık geçerlilik aralığını da taşıyor ve dar ekranda
+                  // tek satıra sığmıyor — kesilirse söylediği şey kayboluyor.
+                  <p className="mt-0.5 line-clamp-2 text-xs text-text-faint">
                     {item.hint}
                   </p>
                 ) : null}

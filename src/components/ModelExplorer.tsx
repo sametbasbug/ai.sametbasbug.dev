@@ -169,8 +169,12 @@ export function ModelExplorer() {
             />
           </div>
 
+          {/* Açılır listelerin doğal genişliği en uzun seçeneğe göre belirlenir
+              ("Bağlam: 128K ve üzeri"); ikisi yan yana 375 px'e sığmıyordu.
+              Dar ekranda satırı eşit paylaşıp daralıyorlar — `min-w-0` olmadan
+              flex öğesi doğal genişliğinin altına inmez ve taşma sürer. */}
           <div className="flex gap-3">
-            <div>
+            <div className="min-w-0 flex-1 sm:flex-none">
               <label htmlFor="siralama" className="sr-only">
                 Sıralama
               </label>
@@ -178,7 +182,7 @@ export function ModelExplorer() {
                 id="siralama"
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortKey)}
-                className="rounded-lg border border-border bg-bg px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
+                className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm focus:border-accent focus:outline-none sm:w-auto"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -188,7 +192,7 @@ export function ModelExplorer() {
               </select>
             </div>
 
-            <div>
+            <div className="min-w-0 flex-1 sm:flex-none">
               <label htmlFor="baglam" className="sr-only">
                 En az bağlam penceresi
               </label>
@@ -196,7 +200,7 @@ export function ModelExplorer() {
                 id="baglam"
                 value={minContext}
                 onChange={(e) => setMinContext(Number(e.target.value))}
-                className="rounded-lg border border-border bg-bg px-3 py-2.5 text-sm focus:border-accent focus:outline-none"
+                className="w-full rounded-lg border border-border bg-bg px-3 py-2.5 text-sm focus:border-accent focus:outline-none sm:w-auto"
               >
                 {contextOptions.map((option) => (
                   <option key={option.value} value={option.value}>
