@@ -70,6 +70,7 @@ src/
     ModelCard.tsx            Kart görünümündeki tek model kartı
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
     CostCalculator.tsx       Maliyet hesaplayıcının formu ve sonuç tablosu
+    DataFreshness.tsx        Verinin kaç günlük olduğunu gösterir
     ModelAtlasMark.tsx       Ayrıntılı ürün işareti (arayüz yüzeyleri)
     ThemeToggle.tsx          Açık/koyu tema düğmesi
     JsonLd.tsx               Yapılandırılmış veriyi sayfaya gömer
@@ -82,6 +83,7 @@ src/
     brand.ts                 Equinox ad ve adres sabitleri
     catalog.ts               Katalogdan türetilen görüntüleme kararları
     constants.ts             MAX_COMPARE, SITE_URL
+    freshness.ts             Verinin yaşı ve tazelik eşiği
     format.ts                tr-TR sayı, fiyat ve tarih biçimlendirme
     jsonld.ts                schema.org üreticileri
     labels.ts                Yetenek/kip/lisans Türkçe etiketleri
@@ -90,6 +92,8 @@ src/
     theme.ts                 Tema anahtarları ve ilk yükleme betiği
 tools/brand/                 OG görseli ve Apple simgesinin üreteç kaynakları
 scripts/build-brand-images.sh  Bu görselleri yeniden üretir
+scripts/kaynak-kontrol.mjs   Kaynak sayfaları değişti mi, bildirir
+kaynak-izi/                  Kaynak sayfalarının metin anlık görüntüleri
 ```
 
 ## Yeni model ekleme
@@ -190,6 +194,49 @@ doğrulanmıştır.** Üçüncü parti toplayıcı kullanılmamaktadır; bu kura
 eklerken de korunmalıdır. Sağlayıcının kendi sayfasında bulamadığınız bir modeli
 toplayıcıdan alıp eklemeyin — bulunamıyor olması genellikle modelin emekliye
 ayrıldığı anlamına gelir.
+
+### Kaynak sayfalarını izlemek
+
+```bash
+npm run kaynak-kontrol              # kontrol et, rapor yaz
+node scripts/kaynak-kontrol.mjs --guncelle   # anlık görüntüleri tazele
+```
+
+Betik on kaynak adresini çeker, metinlerini `kaynak-izi/metin/` altındaki anlık
+görüntülerle karşılaştırır ve hangi sayfanın değiştiğini söyler. Anlık
+görüntüler düz metin olarak depoda durduğu için `git diff kaynak-izi/metin/`
+**neyin** değiştiğini de gösterir — bu, tekrar hangi fiyatı doğrulayacağınızı
+bulmanın en hızlı yolu.
+
+Betik fiyatı okuyup veriyle karşılaştırmaz ve bunu bilerek yapmaz: sayfa düzeni
+değiştiğinde böyle bir ayrıştırıcı sessizce yanlış cevap verirdi. Kararı insan
+verir; betik yalnızca nereye bakılacağını söyler.
+
+**Otomatik okunamayan iki kaynak var** ve betik bunları "değişmedi" saymaz,
+adıyla bildirir:
+
+| Kaynak | Neden |
+| --- | --- |
+| `llama.com` model kartları | Sayfa JavaScript ile çiziliyor; düz `fetch` 40 karakterlik boş kabuk alıyor |
+| `medium.com` (Kumru yazısı) | Medium otomatik istekleri 403 ile geri çeviriyor |
+
+Bu ikisi her turda elle açılmalıdır. Yanlış güven, hiç bilgi olmamasından
+kötüdür — bu yüzden okunamayan sayfa sessizce sağlam sayılmaz.
+
+Doğrulama turu bittiğinde sıra: `models.ts` içindeki `verifiedAt` alanlarını
+güncelleyin, sonra betiği `--guncelle` ile çalıştırıp anlık görüntüleri tazeleyin.
+
+### Tazelik sitede görünür
+
+Altbilgide ve Hakkında sayfasında verinin **en eski** doğrulama tarihi ve kaç
+gün önce olduğu yazar; 45 günü aşınca "tazelenmeli" uyarısına döner. En yeni
+değil en eski tarih gösterilir: tek bir modeli güncelleyip gerisini bırakmak
+böylece taze görünmez.
+
+Yaş tarayıcıda hesaplanır ([DataFreshness.tsx](src/components/DataFreshness.tsx)),
+derleme anında değil. Statik dışa aktarımda sunucunun "bugün"ü derleme günüdür;
+orada hesaplansaydı altı aylık veri ilelebet "1 gün önce doğrulandı" derdi —
+yani tam olarak görünür kılmak istediğimiz şeyi gizlerdi.
 
 Nitekim ilk doğrulama turunda Grok 4.1 Fast bu şekilde katalogdan çıkarıldı:
 xAI'ın fiyat sayfasında ve model dokümantasyonunda yer almıyordu.

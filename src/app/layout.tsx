@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
+import { DataFreshness } from "@/components/DataFreshness";
 import { ModelAtlasMark } from "@/components/ModelAtlasMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
@@ -179,6 +180,7 @@ export default function RootLayout({
                   dokümantasyonundan derlenir. Her modelin detay sayfasında
                   kaynak ve doğrulama tarihi belirtilmiştir.
                 </p>
+                <DataFreshness className="mt-3 text-xs text-text-faint" />
               </div>
               <div className="text-sm">
                 <p className="font-medium text-text">Equinox ağı</p>

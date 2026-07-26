@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DataFreshness } from "@/components/DataFreshness";
 import { ModelAtlasMark } from "@/components/ModelAtlasMark";
 import { JsonLd } from "@/components/JsonLd";
 import { models } from "@/data/models";
@@ -70,6 +71,22 @@ export default function AboutPage() {
             bilgilendirme amaçlıdır. Bağlayıcı fiyat için her zaman
             sağlayıcının kendi sayfasını esas alın.
           </p>
+
+          {/* Verinin yaşı burada, sözün verildiği yerde duruyor: tarihi yazmak
+              ancak okuyucu ne kadar eskidiğini de görürse bir güvence olur. */}
+          <div className="mt-5 rounded-xl border border-border bg-surface p-5">
+            <h3 className="text-sm font-semibold">Veri ne kadar taze?</h3>
+            <DataFreshness className="mt-2 text-sm text-text-muted" />
+            <p className="mt-3 text-sm leading-relaxed text-text-muted">
+              Gösterilen tarih katalogdaki <strong>en eski</strong> doğrulama
+              günüdür; bir modeli güncelleyip gerisini bırakmak burada taze
+              görünmez. Sağlayıcı sayfalarının değişip değişmediği depodaki{" "}
+              <code className="rounded bg-surface-2 px-1 py-0.5 font-mono text-xs">
+                kaynak-izi
+              </code>{" "}
+              anlık görüntüleriyle izlenir, ama doğrulamayı insan yapar.
+            </p>
+          </div>
         </section>
 
         <section>

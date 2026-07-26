@@ -1,0 +1,69 @@
+{
+  "alindi": "2026-07-26T12:14:47.399Z",
+  "kaynaklar": {
+    "https://platform.claude.com/docs/en/about-claude/models/overview": {
+      "ozet": "dffb4eea92a01c39",
+      "karakter": 8873,
+      "okunabilir": true,
+      "dosya": "metin/platform.claude.com__docs-en-about-claude-models-overview.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://developers.openai.com/api/docs/pricing": {
+      "ozet": "917424e437b81c29",
+      "karakter": 17472,
+      "okunabilir": true,
+      "dosya": "metin/developers.openai.com__api-docs-pricing.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://ai.google.dev/gemini-api/docs/pricing": {
+      "ozet": "c1e63c2c93536e4f",
+      "karakter": 51882,
+      "okunabilir": true,
+      "dosya": "metin/ai.google.dev__gemini-api-docs-pricing.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://docs.x.ai/docs/pricing": {
+      "ozet": "ffe36adfa1988f6c",
+      "karakter": 10211,
+      "okunabilir": true,
+      "dosya": "metin/docs.x.ai__docs-pricing.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://api-docs.deepseek.com/quick_start/pricing": {
+      "ozet": "b41fbc828b71f758",
+      "karakter": 2341,
+      "okunabilir": true,
+      "dosya": "metin/api-docs.deepseek.com__quick-start-pricing.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://www.llama.com/docs/model-cards-and-prompt-formats/llama4/": {
+      "ozet": "ae88fdff5fcb371b",
+      "karakter": 40,
+      "okunabilir": false,
+      "dosya": "metin/www.llama.com__docs-model-cards-and-prompt-formats-llama4.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://docs.mistral.ai/models/model-cards/mistral-large-3-25-12": {
+      "ozet": "7d3925ed1c58a907",
+      "karakter": 2983,
+      "okunabilir": true,
+      "dosya": "metin/docs.mistral.ai__models-model-cards-mistral-large-3-25-12.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://docs.mistral.ai/models/model-cards/mistral-small-4-0-26-03": {
+      "ozet": "58b5fe751ecb4fff",
+      "karakter": 2911,
+      "okunabilir": true,
+      "dosya": "metin/docs.mistral.ai__models-model-cards-mistral-small-4-0-26-03.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://www.alibabacloud.com/help/en/model-studio/model-pricing": {
+      "ozet": "e84f9de45e6928d9",
+      "karakter": 134919,
+      "okunabilir": true,
+      "dosya": "metin/www.alibabacloud.com__help-en-model-studio-model-pricing.txt",
+      "verifiedAt": "2026-07-25"
+    },
+    "https://medium.com/vngrs/kumru-llm-34d1628cfd93": null
+  }
+}
