@@ -74,6 +74,24 @@ export const providers: Provider[] = [
     accent: "#615ced",
   },
   {
+    id: "amazon",
+    name: "Amazon",
+    country: "ABD",
+    blurb:
+      "Nova ailesinin geliştiricisi. Modelleri yalnızca Amazon Bedrock üzerinden sunulur; fiyatlandırma AWS hesabınıza işler.",
+    website: "https://aws.amazon.com/nova/",
+    accent: "#ff9900",
+  },
+  {
+    id: "microsoft",
+    name: "Microsoft",
+    country: "ABD",
+    blurb:
+      "Phi ailesinin geliştiricisi. Küçük ama akıl yürütmeye odaklı modelleri MIT lisansıyla açık ağırlıklı yayımlar.",
+    website: "https://azure.microsoft.com/en-us/products/phi/",
+    accent: "#0078d4",
+  },
+  {
     id: "vngrs",
     name: "VNGRS",
     country: "Türkiye",

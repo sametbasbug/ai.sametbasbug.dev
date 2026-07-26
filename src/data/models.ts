@@ -37,6 +37,29 @@ const META_SRC = {
   verifiedAt: "2026-07-25",
 };
 
+/**
+ * Nova künyeleri sağlayıcının kendi belgelerinden; fiyatlar AWS'nin makine
+ * okunur fiyat listesinden alındı (README "Veri bakımı" bölümüne bakın).
+ * Bedrock fiyat sayfası tarayıcıda JavaScript ile çizildiği için okunamıyor.
+ */
+const AWS_NOVA2_SRC = {
+  url: "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-2-lite.html",
+  verifiedAt: "2026-07-26",
+};
+const AWS_NOVA1_SRC = {
+  url: "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+  verifiedAt: "2026-07-26",
+};
+
+const PHI_VISION_SRC = {
+  url: "https://huggingface.co/microsoft/Phi-4-reasoning-vision-15B",
+  verifiedAt: "2026-07-26",
+};
+const PHI_SRC = {
+  url: "https://huggingface.co/microsoft/phi-4",
+  verifiedAt: "2026-07-26",
+};
+
 const KUMRU_SRC = {
   url: "https://medium.com/vngrs/kumru-llm-34d1628cfd93",
   verifiedAt: "2026-07-25",
@@ -1253,6 +1276,291 @@ export const models: Model[] = [
     ],
     docsUrl: "https://www.alibabacloud.com/help/en/model-studio/text-generation-model/",
     source: ALIBABA_SRC,
+  },
+
+  // ------------------------------------------------------------------- Amazon
+  {
+    slug: "nova-2-lite",
+    name: "Nova 2 Lite",
+    providerId: "amazon",
+    apiId: "amazon.nova-2-lite-v1:0",
+    license: "kapali",
+    contextWindow: 1_000_000,
+    maxOutput: 64_000,
+    pricing: { input: 0.33, output: 2.75, cachedInput: 0.0825 },
+    inputModalities: ["metin", "gorsel", "video"],
+    outputModalities: ["metin"],
+    capabilities: [
+      "akil-yurutme",
+      "gorsel-anlama",
+      "arac-kullanimi",
+      "kod",
+      "uzun-baglam",
+      "onbellekleme",
+      "toplu-islem",
+      "ince-ayar",
+    ],
+    summary:
+      "Amazon'un güncel nesli; 1 milyon token bağlamı düşük fiyatla sunan çok kipli akıl yürütme modeli.",
+    description:
+      "Nova 2 Lite, Amazon'un Nova 2 neslindeki genel kullanıma açık modeldir. Uzatılmış düşünme desteğiyle çok adımlı görevlerde daha isabetli sonuç verir; metnin yanında görsel ve video girdisini de anlar. Web'e bağlanma ve Python çalıştırma gibi yerleşik araçları vardır. Yalnızca Amazon Bedrock üzerinden erişilir, yani faturalandırma AWS hesabınıza işler ve bölge seçimi gecikmeyi doğrudan etkiler.",
+    strengths: [
+      "1 milyon token bağlam, fiyatına göre sınıfının çok üstünde",
+      "Görsel ve video anlama tek modelde",
+      "Önbellek yazma ücretsiz, okuma dört kat ucuz",
+      "SFT ve pekiştirmeli ince ayar destekliyor",
+    ],
+    weaknesses: [
+      "Yalnızca Bedrock üzerinden erişilebiliyor; ayrı bir AWS kurulumu gerekiyor",
+      "Azami çıktı 64 bin token ile bağlam genişliğinin çok altında",
+      "Önbellekleme ağırlıklı olarak metin istemleri için",
+    ],
+    useCases: [
+      "Uzun belge ve video arşivlerini tek istemde inceleme",
+      "AWS üzerinde çalışan ajan tabanlı iş akışları",
+      "Yüksek hacimli müşteri desteği ve otomasyon",
+    ],
+    docsUrl:
+      "https://docs.aws.amazon.com/nova/latest/nova2-userguide/what-is-nova-2.html",
+    source: AWS_NOVA2_SRC,
+  },
+  {
+    slug: "nova-premier",
+    name: "Nova Premier",
+    providerId: "amazon",
+    apiId: "amazon.nova-premier-v1:0",
+    license: "kapali",
+    contextWindow: 1_000_000,
+    maxOutput: 10_000,
+    pricing: { input: 2.5, output: 12.5, cachedInput: 0.625 },
+    inputModalities: ["metin", "gorsel", "video"],
+    outputModalities: ["metin"],
+    capabilities: [
+      "akil-yurutme",
+      "gorsel-anlama",
+      "arac-kullanimi",
+      "kod",
+      "uzun-baglam",
+      "onbellekleme",
+      "toplu-islem",
+    ],
+    summary:
+      "Nova 1 neslinin en yetenekli modeli; karmaşık görevler ve model damıtmada öğretmen olarak kullanılır.",
+    description:
+      "Nova Premier, Amazon'un ilk Nova neslindeki amiral gemisidir. Metin, görsel, video ve belge girdilerini birlikte değerlendirir. Ayırt edici yanı, Bedrock'ın model damıtma akışında öğretmen model olarak kullanılabilmesidir: Premier'in çıktısıyla Pro, Lite veya Micro eğitilerek çok daha ucuz özel modeller üretilir. Kendisi ince ayara açık değildir.",
+    strengths: [
+      "1 milyon token bağlam",
+      "Pro, Lite ve Micro için öğretmen model olabiliyor",
+      "Önbellek okuma fiyatı taban girdinin dörtte biri",
+    ],
+    weaknesses: [
+      "İnce ayar desteklemiyor",
+      "Azami çıktı yalnızca 10 bin token",
+      "Bölge desteği Nova ailesinin geri kalanından dar",
+    ],
+    useCases: [
+      "Karmaşık belge ve video çözümlemesi",
+      "Daha ucuz özel modeller için damıtma kaynağı",
+      "Kurumsal ajan uygulamaları",
+    ],
+    docsUrl: "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+    source: AWS_NOVA1_SRC,
+  },
+  {
+    slug: "nova-pro",
+    name: "Nova Pro",
+    providerId: "amazon",
+    apiId: "amazon.nova-pro-v1:0",
+    license: "kapali",
+    contextWindow: 300_000,
+    maxOutput: 10_000,
+    pricing: { input: 0.8, output: 3.2, cachedInput: 0.2 },
+    inputModalities: ["metin", "gorsel", "video"],
+    outputModalities: ["metin"],
+    capabilities: [
+      "gorsel-anlama",
+      "arac-kullanimi",
+      "kod",
+      "uzun-baglam",
+      "onbellekleme",
+      "toplu-islem",
+      "ince-ayar",
+    ],
+    summary:
+      "Nova 1 neslinin denge noktası; doğruluk, hız ve maliyet arasında geniş bir iş yükü aralığını karşılar.",
+    description:
+      "Nova Pro, çok kipli girdileri işleyen ve üretim yüklerinin çoğunda önerilen Nova 1 modelidir. İnce ayar, sağlanan iş hacmi (provisioned throughput) ve toplu çıkarım destekler; Lite ile Micro için öğretmen model olarak da kullanılabilir.",
+    strengths: [
+      "300 bin token bağlam ile görsel ve video anlama",
+      "İnce ayar ve sağlanan iş hacmi desteği",
+      "Önbellek okuma girdinin dörtte biri fiyatına",
+    ],
+    weaknesses: [
+      "Azami çıktı 10 bin token",
+      "Nova 2 nesli çıktıktan sonra fiyat/başarım dengesi geride kaldı",
+    ],
+    useCases: [
+      "Çok kipli sohbet ve belge işleme",
+      "Kuruma özel ince ayarlı modeller",
+      "Toplu belge çözümleme",
+    ],
+    docsUrl: "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+    source: AWS_NOVA1_SRC,
+  },
+  {
+    slug: "nova-lite",
+    name: "Nova Lite",
+    providerId: "amazon",
+    apiId: "amazon.nova-lite-v1:0",
+    license: "kapali",
+    contextWindow: 300_000,
+    maxOutput: 10_000,
+    pricing: { input: 0.06, output: 0.24, cachedInput: 0.015 },
+    inputModalities: ["metin", "gorsel", "video"],
+    outputModalities: ["metin"],
+    capabilities: [
+      "gorsel-anlama",
+      "arac-kullanimi",
+      "uzun-baglam",
+      "onbellekleme",
+      "toplu-islem",
+      "ince-ayar",
+    ],
+    summary:
+      "Çok düşük maliyetli çok kipli model; görsel ve video girdisini yüksek hızda işler.",
+    description:
+      "Nova Lite, görsel ve video anlamayı çok düşük bir fiyatla sunan Nova 1 modelidir. 300 bin token bağlamı ve çok kipli girdi desteğiyle, maliyetin belirleyici olduğu yüksek hacimli işler için tasarlanmıştır. İnce ayara açıktır ve Premier ile Pro'dan damıtılabilir.",
+    strengths: [
+      "Katalogdaki en ucuz çok kipli modellerden",
+      "300 bin token bağlam",
+      "İnce ayar ve toplu çıkarım desteği",
+    ],
+    weaknesses: [
+      "Akıl yürütme gerektiren işlerde üst sınıf modellerin gerisinde",
+      "Azami çıktı 10 bin token",
+    ],
+    useCases: [
+      "Yüksek hacimli görsel ve video etiketleme",
+      "Maliyet duyarlı sohbet arayüzleri",
+      "Belge sınıflandırma",
+    ],
+    docsUrl: "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+    source: AWS_NOVA1_SRC,
+  },
+  {
+    slug: "nova-micro",
+    name: "Nova Micro",
+    providerId: "amazon",
+    apiId: "amazon.nova-micro-v1:0",
+    license: "kapali",
+    contextWindow: 128_000,
+    maxOutput: 10_000,
+    pricing: { input: 0.035, output: 0.14, cachedInput: 0.0087 },
+    inputModalities: ["metin"],
+    outputModalities: ["metin"],
+    capabilities: [
+      "arac-kullanimi",
+      "onbellekleme",
+      "toplu-islem",
+      "ince-ayar",
+    ],
+    summary:
+      "Yalnızca metin işleyen, en düşük gecikmeli ve katalogdaki en ucuz girdi fiyatına sahip model.",
+    description:
+      "Nova Micro, Nova ailesinin yalnızca metin işleyen en küçük üyesidir. Görsel ve belge desteği yoktur; karşılığında gecikme ve maliyet en düşük seviyededir. Yüksek hacimli, basit ve gecikmeye duyarlı işler için tasarlanmıştır.",
+    strengths: [
+      "Katalogdaki en düşük girdi fiyatı",
+      "En düşük gecikme",
+      "İnce ayar ve toplu çıkarım desteği",
+    ],
+    weaknesses: [
+      "Görsel, video ve belge girdisi yok",
+      "128 bin token bağlam, Nova ailesinin en darı",
+      "Karmaşık akıl yürütme için uygun değil",
+    ],
+    useCases: [
+      "Sınıflandırma ve yönlendirme katmanları",
+      "Yüksek hacimli kısa yanıtlar",
+      "Gecikmeye duyarlı sohbet",
+    ],
+    docsUrl: "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+    source: AWS_NOVA1_SRC,
+  },
+
+  // ---------------------------------------------------------------- Microsoft
+  {
+    slug: "phi-4-reasoning-vision-15b",
+    name: "Phi-4 Reasoning Vision 15B",
+    providerId: "microsoft",
+    apiId: "microsoft/Phi-4-reasoning-vision-15B",
+    license: "acik-agirlik",
+    contextWindow: 16_384,
+    pricing: null,
+    parameters: 15,
+    inputModalities: ["metin", "gorsel"],
+    outputModalities: ["metin"],
+    capabilities: [
+      "akil-yurutme",
+      "gorsel-anlama",
+      "kod",
+      "yerel-calisma",
+      "ince-ayar",
+    ],
+    summary:
+      "MIT lisanslı 15 milyar parametreli görsel akıl yürütme modeli; diyagram ve arayüz okumaya odaklı.",
+    description:
+      "Phi-4 Reasoning Vision, Microsoft'un küçük dil modeli ailesini görsel akıl yürütmeye taşıyan üyesidir. Diyagramdan matematik problemi çözme, grafik ve tablo çözümleme gibi işlerde; ayrıca ekran görüntüsünü yorumlayıp arayüz öğesi bulan bilgisayar kullanan ajanlarda kullanılmak üzere eğitilmiştir. MIT lisansıyla yayımlandığı için ticari kullanım dahil serbestçe indirilip çalıştırılabilir.",
+    strengths: [
+      "MIT lisansı — ticari kullanımda kısıt yok",
+      "15 milyar parametreyle tek bir güçlü kartta çalışabilir",
+      "Ekran ve arayüz okuma için özel olarak eğitilmiş",
+    ],
+    weaknesses: [
+      "16 bin token bağlam, katalogdaki en dar pencerelerden",
+      "Barındırma ve işletme maliyeti size ait",
+      "Genel amaçlı sohbet için değil, akıl yürütme görevleri için tasarlanmış",
+    ],
+    useCases: [
+      "Bilgisayar kullanan ajanlar ve arayüz otomasyonu",
+      "Bilimsel diyagram ve grafik çözümleme",
+      "Yerel çalışan görsel soru-cevap",
+    ],
+    docsUrl: "https://azure.microsoft.com/en-us/products/phi/",
+    source: PHI_VISION_SRC,
+  },
+  {
+    slug: "phi-4",
+    name: "Phi-4",
+    providerId: "microsoft",
+    apiId: "microsoft/phi-4",
+    license: "acik-agirlik",
+    contextWindow: 16_384,
+    pricing: null,
+    parameters: 14,
+    inputModalities: ["metin"],
+    outputModalities: ["metin"],
+    capabilities: ["akil-yurutme", "kod", "yerel-calisma", "ince-ayar"],
+    summary:
+      "MIT lisanslı 14 milyar parametreli metin modeli; kısıtlı donanımda akıl yürütme için tasarlandı.",
+    description:
+      "Phi-4, Microsoft'un yoğun (dense) çözücü tabanlı 14 milyar parametreli modelidir. Bellek ve işlem gücünün kısıtlı olduğu ortamlar, gecikmenin belirleyici olduğu senaryolar ve akıl yürütme ağırlıklı görevler için konumlandırılmıştır. MIT lisansıyla yayımlanmıştır.",
+    strengths: [
+      "MIT lisansı — ticari kullanımda kısıt yok",
+      "14 milyar parametreyle mütevazı donanımda çalışır",
+      "Boyutuna göre güçlü akıl yürütme",
+    ],
+    weaknesses: [
+      "16 bin token bağlam",
+      "Görsel girdi yok",
+      "Barındırma ve işletme maliyeti size ait",
+    ],
+    useCases: [
+      "Yerelde çalışan akıl yürütme yardımcıları",
+      "Gecikmeye duyarlı gömülü uygulamalar",
+      "Kuruma özel ince ayar tabanı",
+    ],
+    docsUrl: "https://azure.microsoft.com/en-us/products/phi/",
+    source: PHI_SRC,
   },
 
   // -------------------------------------------------------------------- VNGRS

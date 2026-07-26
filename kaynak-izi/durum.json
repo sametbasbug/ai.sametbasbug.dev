@@ -1,5 +1,5 @@
 {
-  "alindi": "2026-07-26T12:14:47.399Z",
+  "alindi": "2026-07-26T13:05:07.223Z",
   "kaynaklar": {
     "https://platform.claude.com/docs/en/about-claude/models/overview": {
       "ozet": "dffb4eea92a01c39",
@@ -63,6 +63,34 @@
       "okunabilir": true,
       "dosya": "metin/www.alibabacloud.com__help-en-model-studio-model-pricing.txt",
       "verifiedAt": "2026-07-25"
+    },
+    "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-amazon-nova-2-lite.html": {
+      "ozet": "2801e570121342a1",
+      "karakter": 8786,
+      "okunabilir": true,
+      "dosya": "metin/docs.aws.amazon.com__bedrock-latest-userguide-model-card-amazon-nova-2-lite-html.txt",
+      "verifiedAt": "2026-07-26"
+    },
+    "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html": {
+      "ozet": "845a42c3f13738a1",
+      "karakter": 9137,
+      "okunabilir": true,
+      "dosya": "metin/docs.aws.amazon.com__nova-latest-userguide-what-is-nova-html.txt",
+      "verifiedAt": "2026-07-26"
+    },
+    "https://huggingface.co/microsoft/Phi-4-reasoning-vision-15B": {
+      "ozet": "1fd03ee08ba03ad0",
+      "karakter": 49530,
+      "okunabilir": true,
+      "dosya": "metin/huggingface.co__microsoft-Phi-4-reasoning-vision-15B.txt",
+      "verifiedAt": "2026-07-26"
+    },
+    "https://huggingface.co/microsoft/phi-4": {
+      "ozet": "721c17d981c16455",
+      "karakter": 52450,
+      "okunabilir": true,
+      "dosya": "metin/huggingface.co__microsoft-phi-4.txt",
+      "verifiedAt": "2026-07-26"
     },
     "https://medium.com/vngrs/kumru-llm-34d1628cfd93": null
   }

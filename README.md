@@ -176,19 +176,35 @@ Fiyatlar ve model kimlikleri sık değişir. Her modelin `source` alanında veri
 nereden ve **hangi tarihte** alındığı yazılıdır; bu bilgi detay sayfasının
 altında kullanıcıya da gösterilir.
 
-Bu depodaki veri **25 Temmuz 2026** tarihinde şu kaynaklardan derlenmiştir:
+Bu depodaki veri şu kaynaklardan derlenmiştir:
 
-| Sağlayıcı | Kaynak |
-| --- | --- |
-| Anthropic | `platform.claude.com/docs/en/about-claude/models/overview` |
-| OpenAI | `developers.openai.com/api/docs/pricing` |
-| Google | `ai.google.dev/gemini-api/docs/pricing` |
-| xAI | `docs.x.ai/docs/pricing` |
-| DeepSeek | `api-docs.deepseek.com/quick_start/pricing` |
-| Mistral | `docs.mistral.ai` model kartları (model başına ayrı) |
-| Alibaba | `alibabacloud.com/help/en/model-studio/model-pricing` |
-| Meta | `llama.com/docs/model-cards-and-prompt-formats/llama4/` |
-| VNGRS (Kumru) | `medium.com/vngrs/kumru-llm-34d1628cfd93` |
+| Sağlayıcı | Kaynak | Doğrulama |
+| --- | --- | --- |
+| Anthropic | `platform.claude.com/docs/en/about-claude/models/overview` | 2026-07-25 |
+| OpenAI | `developers.openai.com/api/docs/pricing` | 2026-07-25 |
+| Google | `ai.google.dev/gemini-api/docs/pricing` | 2026-07-25 |
+| xAI | `docs.x.ai/docs/pricing` | 2026-07-25 |
+| DeepSeek | `api-docs.deepseek.com/quick_start/pricing` | 2026-07-25 |
+| Mistral | `docs.mistral.ai` model kartları (model başına ayrı) | 2026-07-25 |
+| Alibaba | `alibabacloud.com/help/en/model-studio/model-pricing` | 2026-07-25 |
+| Meta | `llama.com/docs/model-cards-and-prompt-formats/llama4/` | 2026-07-25 |
+| Amazon | `docs.aws.amazon.com` Nova model kartları ve künye tablosu | 2026-07-26 |
+| Microsoft | `huggingface.co/microsoft/*` Phi model kartları | 2026-07-26 |
+| VNGRS (Kumru) | `medium.com/vngrs/kumru-llm-34d1628cfd93` | 2026-07-25 |
+
+**Amazon fiyatları ayrı bir yerden geliyor.** Bedrock'ın fiyat sayfası
+tarayıcıda JavaScript ile çizildiği için okunamıyor; fiyatlar AWS'nin makine
+okunur resmî fiyat listesinden alındı:
+
+```
+https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonBedrock/current/us-east-1/index.json
+```
+
+Bu dosya 1 milyon token değil **1.000 token** başına fiyat verir; katalogdaki
+değerler bin ile çarpılarak yazılmıştır. Yalnızca standart isteğe bağlı
+(on-demand) satırlar alınır — `batch`, `flex`, `priority`, `cross-region` ve
+`custom-model` ekli kullanım türleri farklı fiyatlandırmadır ve katalogda
+gösterilmez.
 
 **Katalogdaki her modelin verisi sağlayıcının kendi resmî sayfasından
 doğrulanmıştır.** Üçüncü parti toplayıcı kullanılmamaktadır; bu kural yeni model
@@ -325,7 +341,7 @@ her şey aynı ağırlıkta olduğu için hiçbir şey öne çıkmıyordu. Ölç
 
 Kararlar:
 
-- **Liste varsayılan görünüm.** Kart ızgarası 31 modeli göz ile
+- **Liste varsayılan görünüm.** Kart ızgarası katalogun tamamını göz ile
   karşılaştırmaya elverişli değil: her sayı kendi kutusunda durduğu için
   sütun okuması yapılamıyor. Kart görünümü özet metni gösterdiği için keşif
   amacıyla seçenek olarak duruyor.

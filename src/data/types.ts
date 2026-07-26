@@ -7,6 +7,8 @@ export type ProviderId =
   | "meta"
   | "mistral"
   | "alibaba"
+  | "amazon"
+  | "microsoft"
   | "vngrs";
 
 export interface Provider {
