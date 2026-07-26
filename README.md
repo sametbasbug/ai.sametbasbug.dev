@@ -68,6 +68,8 @@ src/
     ModelCard.tsx            Tek model kartı
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
     EquinoxMark.tsx          Marka işareti (başlık, altbilgi, hakkında)
+    ThemeToggle.tsx          Açık/koyu tema düğmesi
+    JsonLd.tsx               Yapılandırılmış veriyi sayfaya gömer
     ui.tsx                   Badge, ProviderTag, Stat
   data/
     types.ts                 Model ve Provider tipleri
@@ -77,7 +79,9 @@ src/
     brand.ts                 Equinox ad ve adres sabitleri
     constants.ts             MAX_COMPARE, SITE_URL
     format.ts                tr-TR sayı, fiyat ve tarih biçimlendirme
+    jsonld.ts                schema.org üreticileri
     labels.ts                Yetenek/kip/lisans Türkçe etiketleri
+    theme.ts                 Tema anahtarları ve ilk yükleme betiği
 tools/brand/                 OG görseli ve Apple simgesinin üreteç kaynakları
 scripts/build-brand-images.sh  Bu görselleri yeniden üretir
 ```
@@ -242,6 +246,42 @@ barındırma sunmaz. `license` alanını fiyatın varlığına bakarak doldurmay
   `out/opengraph-image.png` doğru içerik tipiyle yayına çıkar. Görselde model
   sayısı gibi veriyle değişen bir bilgi de bu yüzden yok — statik bir dosya
   katalog büyüdükçe bayatlardı.
+- **Tema seçimi `<html data-theme>` özniteliğinde, betik `<body>`nin ilk
+  çocuğunda.** Site statik HTML olarak sunulur; sunucu ziyaretçinin daha önce
+  hangi temayı seçtiğini bilemez. Seçimi uygulayan betik `<body>`nin en başında
+  ve eş zamanlı çalışır — ayrıştırma orada durur, öznitelik yerleşir, sonra
+  içerik çizilir. Betik daha sonraya bırakılsaydı koyu tema seçmiş kullanıcı her
+  sayfa açılışında önce açık temayı görürdü. `next/script` burada uygun değil:
+  `beforeInteractive` bile ilk boyamadan önce çalışmayı garanti etmez.
+- **`<html>` üzerinde `suppressHydrationWarning` var ve zorunludur.** Betik
+  `data-theme` özniteliğini React hidrasyondan önce yazdığı için sunucu çıktısı
+  ile istemci DOM'u burada bilerek ayrışır; bastırma olmadan her sayfa
+  yüklemesinde hidrasyon uyuşmazlığı hatası alınır. Bastırma yalnızca o öğenin
+  kendi özniteliklerini kapsar, alt ağacı değil.
+- **Tema durumu `useState` ile değil `useSyncExternalStore` ile okunur.** Etkin
+  tema tarayıcıya ait bir durumdur (öznitelik + sistem tercihi), React durumu
+  değil. `useEffect` içinde `setState` çağırmak hem lint kuralını ihlal eder
+  hem de gereksiz bir çizim turu ekler; `getServerSnapshot`'ın `null` dönmesi
+  sunucuda etkin temanın bilinemeyeceğini doğrudan ifade eder.
+- **Koyu tema belirteçleri CSS'te iki kez yazılıdır.** Biri medya sorgusunun
+  içinde (sistem koyu, kullanıcı açık seçmemiş), diğeri dışında (kullanıcı koyu
+  seçmiş). Düz CSS'te bir bildirim bloğunu iki bağlamda yeniden kullanmanın yolu
+  yok. **Bir rengi değiştirirken iki bloğu da güncelleyin.**
+- **Yapılandırılmış veride `Product` + `offers` kullanılmadı.** Fiyatlarımız
+  "1 milyon token başına" birim fiyatlardır; `offers.price` ise satın alınabilir
+  bir ürünün bedelini ifade eder. İkisini eşitlemek arama motoruna 2 dolarlık
+  bir ürün varmış gibi yanlış bilgi vermek olurdu. Bunun yerine model
+  sayfalarında `SoftwareApplication` + `BreadcrumbList`, ana sayfada `WebSite` +
+  `Organization` işaretlenir — hepsi doğruluğundan emin olduğumuz iddialar.
+  Fiyat bilgisi sayfada zaten metin olarak duruyor.
+- **Karşılaştırma sayfasının kanonik adresi parametresizdir.** Seçim `?m=`
+  parametrelerinde tutulduğu için her kombinasyon ayrı bir adres üretir; kanonik
+  adres olmasa arama motoru bunları sayısız kopya sayfa olarak görürdü.
+- **JSON-LD gömülürken `<` kaçırılır.** Veri içinde `</script>` geçen bir metin
+  olsaydı tarayıcı betiği orada kapatır ve kalan JSON sayfaya HTML olarak
+  sızardı. Veri şu an elle yazılıyor ve böyle bir dize içermiyor, ama
+  [JsonLd.tsx](src/components/JsonLd.tsx) bileşeninin güvenliği içeriğe bağlı
+  olmamalı.
 - **Marka adı CSS ile büyütülmez.** Belge `lang="tr"` olduğu için tarayıcı
   `text-transform: uppercase` uygularken Türkçe kuralını izler ve `i` harfini
   noktalı `İ` yapar: "Equinox" → "EQUİNOX". Türkçe sözcükler için doğru olan bu

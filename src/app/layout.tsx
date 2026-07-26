@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { EquinoxMark } from "@/components/EquinoxMark";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   BLOG_URL,
   BRAND_NAME,
@@ -11,6 +12,7 @@ import {
   SITE_NAME,
 } from "@/lib/brand";
 import { SITE_URL } from "@/lib/constants";
+import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
 // latin-ext, Türkçe'ye özgü ğ/ı/İ/ş karakterleri için gerekli.
@@ -70,8 +72,17 @@ export default function RootLayout({
     <html
       lang="tr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      // Satır içi tema betiği `data-theme` özniteliğini React hidrasyondan
+      // önce yazar, dolayısıyla sunucu çıktısıyla istemci DOM'u burada bilerek
+      // ayrışır. Uyarı bastırılmazsa React her yüklemede hidrasyon uyuşmazlığı
+      // hatası verir. Bastırma yalnızca bu öğenin kendi özniteliklerini
+      // kapsar, alt ağacı değil.
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
+        {/* İçerikten önce çalışmalı — gerekçesi lib/theme.ts içinde. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+
         <a
           href="#icerik"
           className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-contrast"
@@ -106,6 +117,7 @@ export default function RootLayout({
                   {link.label}
                 </Link>
               ))}
+              <ThemeToggle />
             </nav>
           </div>
         </header>

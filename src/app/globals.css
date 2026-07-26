@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------- tema --- */
+/*
+ * Üç durum var: sistem tercihini izle (varsayılan), açık, koyu. Kullanıcının
+ * seçimi `<html data-theme="...">` özniteliğinde tutulur.
+ *
+ * Koyu tema bloğu bilerek iki kez yazılmıştır: biri medya sorgusunun içinde
+ * (sistem koyu ve kullanıcı açık seçmemişse), diğeri dışında (kullanıcı koyu
+ * seçmişse). Düz CSS'te bir bildirim bloğunu iki farklı bağlamda yeniden
+ * kullanmanın yolu yok; `light-dark()` ile tekrar önlenebilirdi ama o zaman
+ * her belirteç iki değeri birden taşır ve `@theme` eşlemesi okunaksızlaşır.
+ * Bir değeri değiştirirken İKİ bloğu da güncelleyin.
+ */
 :root {
+  color-scheme: light;
   --bg: #faf9f7;
   --surface: #ffffff;
   --surface-2: #f2f0ec;
@@ -29,8 +41,10 @@
   --eq-gold-ink: #7d5c12;
 }
 
+/* Sistem koyu — kullanıcı açıkça "açık" demediyse. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --bg: #131211;
     --surface: #1c1a18;
     --surface-2: #24211e;
@@ -49,6 +63,26 @@
     /* Koyu zeminde altının kendisi zaten okunuyor. */
     --eq-gold-ink: #f6c66a;
   }
+}
+
+/* Kullanıcı koyu seçti — sistem ne derse desin. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #131211;
+  --surface: #1c1a18;
+  --surface-2: #24211e;
+  --border: #322e2a;
+  --border-strong: #464039;
+  --text: #f0ede8;
+  --text-muted: #a49c91;
+  --text-faint: #7c746a;
+  --accent: #f2637a;
+  --accent-hover: #f8899b;
+  --accent-soft: #2c1a1e;
+  --accent-contrast: #1a1012;
+  --open: #5fc28d;
+  --open-soft: #17281f;
+  --eq-gold-ink: #f6c66a;
 }
 
 @theme inline {
