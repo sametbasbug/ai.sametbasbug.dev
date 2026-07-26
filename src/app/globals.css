@@ -119,6 +119,46 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/*
+ * Kaydırma çubuğu.
+ *
+ * `color-scheme` zaten tarayıcının kendi çubuğunu temaya uyduruyor; buradaki
+ * amaç onu sitenin kendi kenarlık tonuna çekmek. Renkler belirteçten geldiği
+ * için tema değişince çubuk da değişir, ayrıca bir koyu tema kuralı gerekmez.
+ *
+ * `thin` bilerek: Windows'un 17 piksellik varsayılan çubuğu bu sayfa
+ * genişliğinde kalın duruyor. Daha incesini (`none` veya özel 4-6 px) tercih
+ * etmedik — çubuk fareyle tutulabilir kalmalı.
+ */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+/* Safari `scrollbar-color`'ı desteklemiyor, WebKit'in kendi arayüzü gerekiyor.
+   Destekleyen tarayıcılarda bu blok hiç uygulanmaz. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--border-strong);
+    border-radius: 999px;
+    /* Zemin renginde kenarlık, tutamağı inceltmeden içeri boşluk verir. */
+    border: 2px solid var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-faint);
+  }
+}
+
 /* Odak halkası — klavye kullanıcıları için her yerde tutarlı. */
 :focus-visible {
   outline: 2px solid var(--accent);

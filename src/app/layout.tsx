@@ -53,12 +53,23 @@ export const metadata: Metadata = {
   },
 };
 
+/*
+ * Menü tam dolu: beş bağlantı 320 px'te tek satıra ancak sığıyor (ölçüldü,
+ * toplam 319 px). Altıncısı eklenecekse önce bu genişlik yeniden ölçülmeli.
+ *
+ * "Hakkında" burada duruyor çünkü verinin nereden geldiğini anlatan sayfa bu
+ * sitede sıradan bir künye değil; altbilginin sağ alt köşesinde en küçük
+ * puntoyla durması onu fiilen görünmez kılıyordu. Marka yazısının yanına
+ * konması denendi ve bırakıldı: "Model Atlası" ile yan yana gelince göz
+ * ikisini "Model Atlası Hakkında" diye tek bir ifade olarak okuyor.
+ */
 const navLinks = [
   { href: "/", label: "Modeller" },
   { href: "/karsilastir", label: "Karşılaştır" },
-  // Dar ekranda dört bağlantı + tema düğmesi sığsın diye kısa etiket.
+  // Dar ekranda sığsın diye kısa etiket.
   { href: "/hesaplayici", label: "Maliyet" },
   { href: "/saglayicilar", label: "Sağlayıcılar" },
+  { href: "/hakkinda", label: "Hakkında" },
 ];
 
 /**
