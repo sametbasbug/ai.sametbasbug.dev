@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { DataFreshness } from "@/components/DataFreshness";
+import { InlineScript } from "@/components/InlineScript";
 import { ModelAtlasMark } from "@/components/ModelAtlasMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
@@ -97,8 +98,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-bg text-text">
-        {/* İçerikten önce çalışmalı — gerekçesi lib/theme.ts içinde. */}
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* İçerikten önce çalışmalı — gerekçesi lib/theme.ts içinde.
+            Sarmalayıcının neden gerektiği InlineScript.tsx içinde. */}
+        <InlineScript html={themeInitScript} />
 
         <a
           href="#icerik"

@@ -71,6 +71,7 @@ src/
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
     CostCalculator.tsx       Maliyet hesaplayıcının formu ve sonuç tablosu
     DataFreshness.tsx        Verinin kaç günlük olduğunu gösterir
+    InlineScript.tsx         Ayrıştırma anında çalışan satır içi betik
     ModelAtlasMark.tsx       Ayrıntılı ürün işareti (arayüz yüzeyleri)
     ThemeToggle.tsx          Açık/koyu tema düğmesi
     JsonLd.tsx               Yapılandırılmış veriyi sayfaya gömer
@@ -410,6 +411,15 @@ Kararlar:
   sızardı. Veri şu an elle yazılıyor ve böyle bir dize içermiyor, ama
   [JsonLd.tsx](src/components/JsonLd.tsx) bileşeninin güvenliği içeriğe bağlı
   olmamalı.
+- **Satır içi tema betiği `InlineScript` ile sarmalanır.** React, istemcide
+  çizim sırasında çalıştırılabilir bir `<script>` görünce geliştirme kipinde
+  uyarı veriyor. Uyarı doğru — betik istemcide çalışmaz — ama bizim istediğimiz
+  zaten bu, dolayısıyla konsolda kalıcı gürültü olmasının anlamı yok.
+  [InlineScript.tsx](src/components/InlineScript.tsx) betiğin türünü sunucuda
+  `text/javascript`, istemcide `text/plain` yapar; React yalnızca
+  çalıştırılabilir türleri uyarıyor. Çözüm Next'in
+  `preventing-flash-before-hydration` rehberinden. `application/ld+json` de
+  muaf olduğu için `JsonLd` bu sarmalayıcıya ihtiyaç duymaz.
 - **Marka adı CSS ile büyütülmez.** Belge `lang="tr"` olduğu için tarayıcı
   `text-transform: uppercase` uygularken Türkçe kuralını izler ve `i` harfini
   noktalı `İ` yapar: "Equinox" → "EQUİNOX". Türkçe sözcükler için doğru olan bu
