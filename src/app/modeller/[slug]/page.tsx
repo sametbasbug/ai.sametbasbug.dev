@@ -18,6 +18,7 @@ import {
   capabilityLabels,
   modalityLabels,
 } from "@/lib/labels";
+import { baseValidUpTo, tierRows } from "@/lib/pricing";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -46,6 +47,13 @@ export default async function ModelPage({ params }: Params) {
   if (!model) notFound();
 
   const provider = providerMap[model.providerId];
+  const tiers = model.pricing ? tierRows(model.pricing) : [];
+  const baseLimit = model.pricing ? baseValidUpTo(model.pricing) : null;
+  // Taban fiyat kutucuklarının altındaki açıklama: kademeliyse geçerlilik
+  // sınırını söylemezsek 0,13 $ rakamı modelin tamamı için geçerli sanılır.
+  const priceHint = baseLimit
+    ? `1M token · ${formatContext(baseLimit)} token'a kadar`
+    : "1M token";
 
   // Aynı sağlayıcıdan değilse bile bağlam/fiyat olarak yakın modeller.
   const alternatives = models
@@ -139,12 +147,12 @@ export default async function ModelPage({ params }: Params) {
           <Stat
             label="Girdi fiyatı"
             value={model.pricing ? formatPrice(model.pricing.input) : "—"}
-            hint={model.pricing ? "1M token" : "Kendi barındırmanız"}
+            hint={model.pricing ? priceHint : "Kendi barındırmanız"}
           />
           <Stat
             label="Çıktı fiyatı"
             value={model.pricing ? formatPrice(model.pricing.output) : "—"}
-            hint={model.pricing ? "1M token" : "Kendi barındırmanız"}
+            hint={model.pricing ? priceHint : "Kendi barındırmanız"}
           />
           {model.pricing?.cachedInput !== undefined ? (
             <Stat
@@ -174,8 +182,63 @@ export default async function ModelPage({ params }: Params) {
           />
         </dl>
 
-        {model.pricing?.note ? (
+        {tiers.length > 0 ? (
+          <div className="mt-6">
+            <h3 className="text-xs font-medium uppercase tracking-wide text-text-faint">
+              İstem uzunluğuna göre fiyat
+            </h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-text-muted">
+              Eşik aşıldığında isteğin tüm token&apos;ları üst kademeden
+              ücretlendirilir; eşiğe kadarki kısım taban fiyatta kalmaz.
+            </p>
+            <div className="mt-3 overflow-x-auto rounded-lg border border-border">
+              <table className="w-full min-w-[380px] border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-border bg-surface-2 text-xs uppercase tracking-wide text-text-faint">
+                    <th scope="col" className="px-3 py-2 text-left font-medium">
+                      İstem uzunluğu
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-right font-medium">
+                      Girdi
+                    </th>
+                    <th scope="col" className="px-3 py-2 text-right font-medium">
+                      Çıktı
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tiers.map((tier) => (
+                    <tr key={tier.label} className="border-t border-border">
+                      <th
+                        scope="row"
+                        className="px-3 py-2.5 text-left font-normal text-text-muted"
+                      >
+                        {tier.label}
+                      </th>
+                      <td className="px-3 py-2.5 text-right tabular-nums">
+                        {formatPrice(tier.input)}
+                      </td>
+                      <td className="px-3 py-2.5 text-right tabular-nums">
+                        {formatPrice(tier.output)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
+
+        {model.pricing?.promo ? (
           <p className="mt-5 rounded-lg border border-accent/20 bg-accent-soft px-3 py-2 text-sm text-accent">
+            {formatDate(model.pricing.promo.until)} tarihine kadar tanıtım
+            fiyatı: {formatPrice(model.pricing.promo.input)} girdi,{" "}
+            {formatPrice(model.pricing.promo.output)} çıktı (1M token).
+          </p>
+        ) : null}
+
+        {model.pricing?.note ? (
+          <p className="mt-3 rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text-muted">
             {model.pricing.note}
           </p>
         ) : null}
@@ -185,7 +248,17 @@ export default async function ModelPage({ params }: Params) {
             Bu model açık ağırlıklıdır: token başına ücret ödemezsiniz, buna
             karşılık donanım ve işletme maliyetini siz üstlenirsiniz.
           </p>
-        ) : null}
+        ) : (
+          <p className="mt-5 text-sm text-text-muted">
+            <Link
+              href="/hesaplayici"
+              className="underline underline-offset-4 hover:text-text"
+            >
+              Maliyet hesaplayıcıda
+            </Link>{" "}
+            kendi kullanımınıza göre aylık tutarı görebilirsiniz.
+          </p>
+        )}
       </section>
 
       {/* -------------------------------------------------------- açıklama */}

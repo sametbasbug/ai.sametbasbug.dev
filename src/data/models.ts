@@ -181,7 +181,7 @@ export const models: Model[] = [
     pricing: {
       input: 3,
       output: 15,
-      note: "31 Ağustos 2026'ya kadar tanıtım fiyatı: 2 $ / 10 $",
+      promo: { input: 2, output: 10, until: "2026-08-31" },
     },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
@@ -627,7 +627,7 @@ export const models: Model[] = [
     pricing: {
       input: 2,
       output: 12,
-      note: "200 bin token üzeri istemlerde 4 $ / 18 $",
+      tiers: [{ over: 200_000, input: 4, output: 18 }],
     },
     inputModalities: ["metin", "gorsel", "ses", "video"],
     outputModalities: ["metin"],
@@ -839,7 +839,7 @@ export const models: Model[] = [
       input: 2,
       output: 6,
       cachedInput: 0.3,
-      note: "İstem 200 bin token'ı aştığında tüm token'lar iki katı ücretlendirilir: 4 $ girdi, 12 $ çıktı",
+      tiers: [{ over: 200_000, input: 4, output: 12 }],
     },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
@@ -883,7 +883,7 @@ export const models: Model[] = [
       input: 1.25,
       output: 2.5,
       cachedInput: 0.2,
-      note: "İstem 200 bin token'ı aştığında tüm token'lar iki katı ücretlendirilir: 2,50 $ girdi, 5 $ çıktı",
+      tiers: [{ over: 200_000, input: 2.5, output: 5 }],
     },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
@@ -1171,7 +1171,10 @@ export const models: Model[] = [
     pricing: {
       input: 0.4,
       output: 1.6,
-      note: "İstem 256 bin token'ı aştığında fiyat yükselir: 1,20 $ girdi, 4,80 $ çıktı. Şu anda liste fiyatına geçici %20 indirim uygulanıyor",
+      tiers: [{ over: 256_000, input: 1.2, output: 4.8 }],
+      // İndirimin ne zaman biteceği açıklanmadığı için `promo` olarak
+      // yapılandırılamıyor: `until` alanına yazacak doğrulanmış bir tarih yok.
+      note: "Liste fiyatına şu anda geçici %20 indirim uygulanıyor",
     },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],
@@ -1215,7 +1218,10 @@ export const models: Model[] = [
     pricing: {
       input: 0.03,
       output: 0.13,
-      note: "Bu fiyat 32 bin token'a kadar geçerlidir. 32-256 bin: 0,10 $ / 0,40 $. 256 bin-1 milyon: 0,20 $ / 0,80 $",
+      tiers: [
+        { over: 32_000, input: 0.1, output: 0.4 },
+        { over: 256_000, input: 0.2, output: 0.8 },
+      ],
     },
     inputModalities: ["metin", "gorsel"],
     outputModalities: ["metin"],

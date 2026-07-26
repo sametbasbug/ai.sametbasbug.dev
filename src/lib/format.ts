@@ -37,6 +37,19 @@ export function formatPrice(usdPerMillion: number): string {
   return `${formatter.format(usdPerMillion)} $`;
 }
 
+/**
+ * Hesaplayıcı toplamları. Fiyat birimlerinden farklı bir ölçekte gezinir:
+ * aylık tutar binlerce dolar da olabilir, birkaç kuruş da. Sabit basamak
+ * sayısı ikisinden birini okunmaz yapardı — 1.234,5678 $ ya da 0,00 $.
+ */
+export function formatCost(usd: number): string {
+  const digits = usd === 0 ? 2 : usd >= 1 ? 2 : usd >= 0.01 ? 3 : 4;
+  return `${new Intl.NumberFormat("tr-TR", {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(usd)} $`;
+}
+
 export function formatParameters(billions: number): string {
   return `${numberFormatter.format(billions)} milyar`;
 }

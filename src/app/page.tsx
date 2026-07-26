@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { ModelExplorer } from "@/components/ModelExplorer";
 import { models } from "@/data/models";
 import { providers } from "@/data/providers";
 import { formatContext, formatPrice } from "@/lib/format";
 import { websiteJsonLd } from "@/lib/jsonld";
+import { baseValidUpTo } from "@/lib/pricing";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -19,6 +21,7 @@ export default function HomePage() {
     m.contextWindow > max.contextWindow ? m : max,
   );
   const openWeight = models.filter((m) => m.license === "acik-agirlik").length;
+  const cheapestLimit = baseValidUpTo(cheapest.pricing!);
 
   const highlights = [
     { label: "Model", value: String(models.length) },
@@ -32,7 +35,12 @@ export default function HomePage() {
     {
       label: "En düşük çıktı fiyatı",
       value: formatPrice(cheapest.pricing!.output),
-      hint: cheapest.name,
+      // Kademeli bir modelde taban fiyat yalnızca ilk eşiğe kadar geçerli.
+      // Sınırı yazmazsak bu rakam modelin tamamı için geçerli sanılır ve kart
+      // en ucuz modeli yanlış gösterir.
+      hint: cheapestLimit
+        ? `${cheapest.name} · ${formatContext(cheapestLimit)} token'a kadar`
+        : cheapest.name,
     },
   ];
 
@@ -54,6 +62,16 @@ export default function HomePage() {
             ve yeteneklerine göre filtreleyin, dördüne kadar modeli yan yana
             karşılaştırın.
           </p>
+
+          <div className="mt-6">
+            <Link
+              href="/hesaplayici"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-surface px-4 py-2 text-sm font-medium transition-colors hover:border-border-strong"
+            >
+              Kendi kullanımınıza göre maliyet hesaplayın
+              <span aria-hidden>→</span>
+            </Link>
+          </div>
 
           <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
             {highlights.map((item) => (

@@ -58,6 +58,7 @@ src/
     page.tsx                 Ana sayfa: hero + filtrelenebilir model listesi
     modeller/[slug]/page.tsx Model detay sayfası (statik üretilir)
     karsilastir/page.tsx     Karşılaştırma sayfası (?m=slug&m=slug)
+    hesaplayici/page.tsx     Maliyet hesaplayıcı
     saglayicilar/page.tsx    Sağlayıcı özetleri
     hakkinda/page.tsx        Site, veri politikası ve ekosistem bağı
     icon.svg                 Favicon (Equinox işareti)
@@ -67,6 +68,7 @@ src/
     ModelExplorer.tsx        Arama, filtreler, kart ızgarası, seçim çubuğu
     ModelCard.tsx            Tek model kartı
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
+    CostCalculator.tsx       Maliyet hesaplayıcının formu ve sonuç tablosu
     EquinoxMark.tsx          Marka işareti (başlık, altbilgi, hakkında)
     ThemeToggle.tsx          Açık/koyu tema düğmesi
     JsonLd.tsx               Yapılandırılmış veriyi sayfaya gömer
@@ -81,6 +83,7 @@ src/
     format.ts                tr-TR sayı, fiyat ve tarih biçimlendirme
     jsonld.ts                schema.org üreticileri
     labels.ts                Yetenek/kip/lisans Türkçe etiketleri
+    pricing.ts               Kademe çözümleme ve maliyet hesabı
     theme.ts                 Tema anahtarları ve ilk yükleme betiği
 tools/brand/                 OG görseli ve Apple simgesinin üreteç kaynakları
 scripts/build-brand-images.sh  Bu görselleri yeniden üretir
@@ -189,24 +192,61 @@ tercih edilmiştir.
 
 ### Kademeli fiyatlandırma
 
-Bazı sağlayıcılar istem uzunluğuna göre farklı fiyat uygular ve veri modeli tek
-bir girdi/çıktı fiyatı tuttuğu için bunu doğrudan ifade edemez:
+Bazı sağlayıcılar istem uzunluğuna göre farklı fiyat uygular. Bu, `pricing`
+içindeki **`tiers`** dizisiyle yapısal olarak ifade edilir:
 
-- **xAI** — istem 200 bin token'ı aştığında *tüm* token'lar iki katı
-  ücretlendirilir.
-- **Alibaba** — Qwen3.7 Plus'ta 256 bin token üstünde fiyat üç katına çıkar;
-  Qwen3.7 Flash'ta üç kademe vardır (32 bin ve 256 bin sınırlarında).
+```ts
+pricing: {
+  input: 0.03,                                   // ilk eşiğe kadar geçerli
+  output: 0.13,
+  tiers: [
+    { over: 32_000, input: 0.1, output: 0.4 },   // 32 bin token'ı aşan istemler
+    { over: 256_000, input: 0.2, output: 0.8 },
+  ],
+}
+```
 
-Bu durumlarda **taban katman** fiyatı gösterilir ve istisna `pricing.note`
-alanına yazılır; not hem karşılaştırma tablosunda hem detay sayfasında görünür.
-Yeni bir model eklerken sağlayıcının kademeli fiyatı olup olmadığına bakın —
-yalnızca taban fiyatı yazmak uzun bağlam senaryosunda kullanıcıyı yanıltır.
+Kritik kural: **eşik aşıldığında isteğin tüm token'ları üst kademeden
+ücretlendirilir.** Gelir vergisi gibi dilimlenmez. Bu katalogdaki üç sağlayıcı
+da (xAI, Google, Alibaba) böyle çalışıyor; farklı davranan bir sağlayıcı
+eklenirse `lib/pricing.ts` içindeki hesap da değişmelidir.
 
-**Bilinen sınırlama:** ana sayfadaki "en düşük çıktı fiyatı" istatistiği taban
-katmanları karşılaştırır. Şu anda Qwen3.7 Flash'ı (0,13 $, yalnızca 32 bin
-token'a kadar) DeepSeek V4 Flash'ın önüne koyuyor (0,28 $, 1 milyona kadar sabit).
-Bunu düzgün çözmek `pricing` alanına yapısal bir kademe listesi eklemeyi
-gerektirir; maliyet hesaplayıcı yapılırken ele alınmak üzere ertelendi.
+Süreli kampanyalar `promo` alanına yazılır:
+
+```ts
+promo: { input: 2, output: 10, until: "2026-08-31" },
+```
+
+Hesaplayıcı `until` tarihini **tarayıcıdaki güne** göre değerlendirir; site
+statik olarak dışa aktarıldığı için derleme günü güvenilir değildir. Bitiş
+tarihi açıklanmamış indirimler `promo` olarak yazılamaz — `note` alanında
+düzyazı olarak kalır (Qwen3.7 Plus'taki %20 indirim böyle).
+
+`note` artık yalnızca bu artık durumlar içindir; kademe ve kampanya bilgisini
+oraya düzyazıyla yazmayın, hesaplayıcı okuyamaz.
+
+Kademeli bir modelde taban fiyatın nereye kadar geçerli olduğu ana sayfa
+istatistiğinde, model detay künyesinde ve karşılaştırma tablosunda açıkça
+yazar ("32K token'a kadar"). Eski **bilinen sınırlama** — ana sayfanın
+Qwen3.7 Flash'ı en ucuz göstermesi — böylece giderildi: rakam hâlâ en düşük
+taban fiyat, ama artık geçerlilik aralığıyla birlikte gösteriliyor.
+
+### Maliyet hesaplayıcı
+
+`/hesaplayici` sayfası, girilen aylık kullanıma göre tüm modelleri ucuzdan
+pahalıya sıralar. Hesap `lib/pricing.ts` içindeki saf fonksiyonlarda durur;
+detay sayfası da kademe tablosunu aynı modülden üretir, iki ayrı hesap yoktur.
+
+Bilinçli sınırlar:
+
+- Yalnızca metin token'ı hesaplanır. Görsel ve ses girdisi, toplu işlem
+  indirimi ve ücretsiz kota kapsam dışıdır.
+- Önbellek fiyatı açıklamayan modellerde önbellek oranı **yok sayılır**;
+  indirim uydurmaktansa tam fiyat göstermek doğru sonucu verir.
+- Üst kademede önbellek fiyatı açıklanmamışsa taban önbellek fiyatı kullanılır
+  ve bu, tablonun altında varsayım olarak belirtilir.
+- Açık ağırlıklı modeller tabloya girmez, ayrı bir listede görünür: donanım
+  maliyeti kullanıcıya bağlıdır ve token fiyatıyla karşılaştırılamaz.
 
 ### Lisans ile fiyat birbirinden bağımsızdır
 
@@ -294,6 +334,5 @@ barındırma sunmaz. `license` alanını fiyatın varlığına bakarak doldurmay
 
 İlk sürümde bilinçli olarak kapsam dışı bırakılanlar:
 
-- Maliyet hesaplayıcı (aylık token kullanımından TL/USD tahmini)
 - Canlı fiyat çekme veya CMS entegrasyonu
 - Kıyaslama (benchmark) skorları

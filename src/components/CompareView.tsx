@@ -8,12 +8,14 @@ import { providerMap } from "@/data/providers";
 import type { Capability, Model } from "@/data/types";
 import {
   formatContext,
+  formatDate,
   formatParameters,
   formatPrice,
   formatTokens,
 } from "@/lib/format";
 import { capabilityLabels, licenseLabels, modalityLabels } from "@/lib/labels";
 import { MAX_COMPARE } from "@/lib/constants";
+import { baseValidUpTo, tierRows } from "@/lib/pricing";
 
 const allCapabilities = Object.keys(capabilityLabels) as Capability[];
 
@@ -116,6 +118,37 @@ export function CompareView() {
   );
 
   const columnWidth = `${100 / (selected.length + 1)}%`;
+
+  /**
+   * Fiyat satırlarının altındaki açıklama. Kademeli bir modelde taban fiyatın
+   * nereye kadar geçerli olduğunu yazmazsak sütunlar yanlış okunur: 0,03 $ ile
+   * 0,14 $ yan yana durur ama biri yalnızca 32 bin token'a kadar geçerlidir.
+   */
+  const priceHint = (model: Model) => {
+    if (!model.pricing) return "açık ağırlık";
+    const limit = baseValidUpTo(model.pricing);
+    return limit ? `1M token · ${formatContext(limit)} token'a kadar` : "1M token";
+  };
+
+  /** Kademe, kampanya ve serbest not — hepsi tek satırda. */
+  const priceDetails = (model: Model): string[] => {
+    if (!model.pricing) return ["Token ücreti yok"];
+    const rows = tierRows(model.pricing).map(
+      (tier) =>
+        `${tier.label}: ${formatPrice(tier.input)} / ${formatPrice(tier.output)}`,
+    );
+    const details = rows.length > 0 ? rows : ["Bağlam boyunca tek fiyat"];
+    const promo = model.pricing.promo;
+    if (promo) {
+      details.push(
+        `${formatDate(promo.until)} tarihine kadar tanıtım fiyatı: ${formatPrice(
+          promo.input,
+        )} / ${formatPrice(promo.output)}`,
+      );
+    }
+    if (model.pricing.note) details.push(model.pricing.note);
+    return details;
+  };
 
   return (
     <div className="space-y-6">
@@ -283,7 +316,7 @@ export function CompareView() {
               cells={selected.map((m) =>
                 m.pricing ? formatPrice(m.pricing.input) : "Ücretsiz*",
               )}
-              hints={selected.map((m) => (m.pricing ? "1M token" : "açık ağırlık"))}
+              hints={selected.map(priceHint)}
               highlight={selected.map(
                 (m) => m.pricing?.input === inputBest,
               )}
@@ -294,7 +327,7 @@ export function CompareView() {
               cells={selected.map((m) =>
                 m.pricing ? formatPrice(m.pricing.output) : "Ücretsiz*",
               )}
-              hints={selected.map((m) => (m.pricing ? "1M token" : "açık ağırlık"))}
+              hints={selected.map(priceHint)}
               highlight={selected.map(
                 (m) => m.pricing?.output === outputBest,
               )}
@@ -307,6 +340,15 @@ export function CompareView() {
                   ? formatPrice(m.pricing.cachedInput)
                   : "—",
               )}
+            />
+            <ListRow
+              label="Fiyat ayrıntısı"
+              marker="·"
+              markerClass="text-text-faint"
+              cells={selected.map((m) => ({
+                key: m.slug,
+                items: priceDetails(m),
+              }))}
             />
             <Row
               label="Parametre"

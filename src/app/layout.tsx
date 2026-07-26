@@ -50,6 +50,8 @@ export const metadata: Metadata = {
 const navLinks = [
   { href: "/", label: "Modeller" },
   { href: "/karsilastir", label: "Karşılaştır" },
+  // Dar ekranda dört bağlantı + tema düğmesi sığsın diye kısa etiket.
+  { href: "/hesaplayici", label: "Maliyet" },
   { href: "/saglayicilar", label: "Sağlayıcılar" },
 ];
 
@@ -91,7 +93,11 @@ export default function RootLayout({
         </a>
 
         <header className="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
-          <div className="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4 sm:px-6">
+          {/* 375 px genişlikte dört bağlantı, tema düğmesi ve işaret aynı
+              satıra ancak sığıyor: boşluk ve yazı boyutu sm altında bilerek
+              küçültülüyor. Menüye beşinci bir bağlantı eklenecekse önce bu
+              genişlik ölçülmeli. */}
+          <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-6 sm:px-6">
             <Link href="/" className="flex items-center gap-2.5">
               <EquinoxMark className="h-9 w-9 shrink-0" />
               {/* Dar ekranda üç menü öğesiyle birlikte sığmıyor. `sr-only`
@@ -112,7 +118,7 @@ export default function RootLayout({
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-md px-2 py-2 text-[13px] text-text-muted transition-colors hover:bg-surface-2 hover:text-text sm:px-3 sm:text-sm"
+                  className="rounded-md px-1.5 py-2 text-xs text-text-muted transition-colors hover:bg-surface-2 hover:text-text sm:px-3 sm:text-sm"
                 >
                   {link.label}
                 </Link>
