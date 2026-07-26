@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
-import { EquinoxMark } from "@/components/EquinoxMark";
+import { ModelAtlasMark } from "@/components/ModelAtlasMark";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   BLOG_URL,
@@ -9,6 +9,7 @@ import {
   BRAND_PREFIX,
   BRAND_PREFIX_UPPER,
   EQUINOX_URL,
+  ORBIT_URL,
   SITE_NAME,
 } from "@/lib/brand";
 import { SITE_URL } from "@/lib/constants";
@@ -56,13 +57,26 @@ const navLinks = [
 ];
 
 /**
- * Altbilgideki ekosistem bağlantıları. Bilerek kısa: kardeş yüzeylerin güncel
+ * Altbilgideki ağ bağlantıları. Bilerek kısa: kardeş yüzeylerin güncel
  * listesi Equinox giriş sayfasında durur, burada çoğaltılırsa bir yüzey
  * kapandığında iki yerden birinin bayatlaması kaçınılmaz olur.
  */
-const ecosystemLinks = [
-  { href: EQUINOX_URL, label: "Equinox", host: "equinox.sametbasbug.dev" },
-  { href: BLOG_URL, label: "Ana blog", host: "sametbasbug.dev" },
+const networkLinks = [
+  {
+    href: EQUINOX_URL,
+    label: "Ana kapı",
+    host: "equinox.sametbasbug.dev",
+  },
+  {
+    href: ORBIT_URL,
+    label: "Orbit",
+    host: "orbit.sametbasbug.dev",
+  },
+  {
+    href: BLOG_URL,
+    label: "Ana blog",
+    host: "sametbasbug.dev",
+  },
 ];
 
 export default function RootLayout({
@@ -92,22 +106,27 @@ export default function RootLayout({
           İçeriğe geç
         </a>
 
-        <header className="sticky top-0 z-40 border-b border-border bg-bg/85 backdrop-blur">
+        <header className="sticky top-0 z-40 border-b border-border bg-bg/88 backdrop-blur">
+          <div aria-hidden className="atlas-brand-rail h-0.5" />
           {/* 375 px genişlikte dört bağlantı, tema düğmesi ve işaret aynı
               satıra ancak sığıyor: boşluk ve yazı boyutu sm altında bilerek
               küçültülüyor. Menüye beşinci bir bağlantı eklenecekse önce bu
               genişlik ölçülmeli. */}
           <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-6 sm:px-6">
-            <Link href="/" className="flex items-center gap-2.5">
-              <EquinoxMark className="h-9 w-9 shrink-0" />
+            <Link
+              href="/"
+              className="group flex items-center gap-2.5 rounded-md"
+              aria-label={`${SITE_NAME} ana sayfa`}
+            >
+              <ModelAtlasMark className="h-9 w-9 shrink-0 transition-transform duration-200 group-hover:-rotate-2 group-hover:scale-[1.03] min-[420px]:h-10 min-[420px]:w-10" />
               {/* Dar ekranda üç menü öğesiyle birlikte sığmıyor. `sr-only`
                   kullanılıyor, `hidden` değil: gizliyken de bağlantının
                   erişilebilir adı olarak kalıyor. */}
               <span className="sr-only whitespace-nowrap min-[420px]:not-sr-only">
-                <span className="block font-mono text-[10px] font-semibold leading-none tracking-[0.18em] text-eq-gold-ink">
+                <span className="block font-mono text-[9px] font-semibold leading-none tracking-[0.2em] text-eq-gold-ink">
                   {BRAND_PREFIX_UPPER}
                 </span>
-                <span className="mt-1 block text-[15px] font-semibold leading-none tracking-tight">
+                <span className="mt-1 block text-[15px] font-semibold leading-none tracking-[-0.025em]">
                   {BRAND_NAME}
                 </span>
               </span>
@@ -132,17 +151,25 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer className="mt-20 border-t border-border bg-surface">
+        <footer className="relative mt-20 border-t border-border bg-surface">
+          <div aria-hidden className="atlas-brand-rail absolute inset-x-0 top-0 h-px opacity-70" />
           <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
             <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
               <div className="max-w-sm">
                 <div className="flex items-center gap-2.5">
-                  <EquinoxMark className="h-7 w-7 shrink-0" />
-                  <p className="text-sm font-semibold">{SITE_NAME}</p>
+                  <ModelAtlasMark className="h-9 w-9 shrink-0" />
+                  <div>
+                    <p className="font-mono text-[9px] font-semibold leading-none tracking-[0.18em] text-eq-gold-ink">
+                      {BRAND_PREFIX_UPPER}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold leading-none">
+                      {BRAND_NAME}
+                    </p>
+                  </div>
                 </div>
                 <p className="mt-3 text-sm leading-relaxed text-text-muted">
-                  Yapay zekâ modellerini Türkçe olarak keşfetmek ve
-                  karşılaştırmak için bağımsız bir kaynak.
+                  Yapay zekâ modellerinin arasındaki farkı okunur hâle getiren
+                  bağımsız Türkçe rehber.
                 </p>
               </div>
               <div className="text-sm text-text-muted">
@@ -154,13 +181,13 @@ export default function RootLayout({
                 </p>
               </div>
               <div className="text-sm">
-                <p className="font-medium text-text">Ekosistem</p>
+                <p className="font-medium text-text">Equinox ağı</p>
                 <p className="mt-3 max-w-xs leading-relaxed text-text-muted">
-                  Model Atlası, Samet Başbuğ&apos;un Equinox ekosistemindeki
-                  yayın yüzeylerinden biridir.
+                  Ana kapı Equinox&apos;ta; aile, ortak akış ve ajan profilleri
+                  Orbit&apos;te.
                 </p>
                 <ul className="mt-3 space-y-1.5">
-                  {ecosystemLinks.map((link) => (
+                  {networkLinks.map((link) => (
                     <li key={link.href}>
                       <a
                         href={link.href}

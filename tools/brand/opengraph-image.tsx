@@ -43,23 +43,59 @@ export default function OpengraphImage() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <svg width="88" height="88" viewBox="0 0 64 64">
-            <rect width="64" height="64" rx="16" fill="#0d1020" />
-            <circle cx="25" cy="32" r="15" fill="#f6c66a" opacity="0.95" />
-            <circle cx="39" cy="32" r="15" fill="#0d1020" />
-            <path
-              d="M11 34c12-12 30-12 42 0"
+            <defs>
+              <linearGradient
+                id="atlas-surface"
+                x1="7"
+                y1="5"
+                x2="58"
+                y2="60"
+                gradientUnits="userSpaceOnUse"
+              >
+                <stop stopColor="#861a32" />
+                <stop offset="0.52" stopColor="#b62243" />
+                <stop offset="1" stopColor="#dc6478" />
+              </linearGradient>
+            </defs>
+            <rect
+              x="2"
+              y="2"
+              width="60"
+              height="60"
+              rx="16"
+              fill="url(#atlas-surface)"
+            />
+            <rect
+              x="2.75"
+              y="2.75"
+              width="58.5"
+              height="58.5"
+              rx="15.25"
               fill="none"
-              stroke="#73d7ff"
-              strokeWidth="2"
-              opacity="0.65"
+              stroke="#fff"
+              strokeOpacity="0.22"
+              strokeWidth="1.5"
             />
             <path
-              d="M12 30c12 12 28 12 40 0"
+              d="M13 39C23 20 39 13 53 23"
               fill="none"
-              stroke="#f2637a"
-              strokeWidth="2"
-              opacity="0.55"
+              stroke="#f6c66a"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              opacity="0.82"
             />
+            <circle cx="53" cy="23" r="3.2" fill="#fff4d3" />
+            <g
+              fill="none"
+              stroke="#fff"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M14 48h37" strokeWidth="3.2" opacity="0.94" />
+            </g>
+            <rect x="20" y="34" width="6" height="14" rx="3" fill="#fff" />
+            <rect x="30" y="26" width="6" height="22" rx="3" fill="#fff" />
+            <rect x="40" y="17" width="6" height="31" rx="3" fill="#fff" />
           </svg>
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <div

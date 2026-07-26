@@ -1,20 +1,28 @@
 /**
- * Equinox marka bağı.
+ * Equinox ağı bağı.
  *
- * Model Atlası, Samet Başbuğ'un Equinox ekosistemindeki yayın yüzeylerinden
- * biridir. Bu dosya bağın tek kaynağıdır: ad, adres ve imza metni burada
+ * Model Atlası, Samet Başbuğ'un Equinox ağındaki ürünlerden biridir. Bu dosya
+ * bağın tek kaynağıdır: ad, adres ve imza metni burada
  * durur, arayüzde elle tekrarlanmaz.
  *
- * Görsel kimlik bilinçli olarak devralınmadı. Equinox'un kendi sayfası koyu ve
+ * Görsel kimlik bilinçli olarak kopyalanmadı. Equinox'un kendi sayfası koyu ve
  * atmosferiktir; Model Atlası ise fiyat sütunları ve karşılaştırma tabloları
- * olan veri yoğun bir sitedir. Ortak olan işaret, altın vurgu ve ad kilidi —
- * zemin paleti değil.
+ * olan veri yoğun bir sitedir. Bağ; ad kilidi, Equinox altını ve ağdaki her
+ * ürüne özgü renkli işaret sistemiyle kurulur — ortak favicon veya zemin
+ * paletiyle değil.
  */
 
-/** Ekosistem giriş sayfası. Kardeş yüzeylerin güncel listesi orada durur. */
+/** Equinox ana kapısı. Ağdaki yüzeylerin güncel listesi burada durur. */
 export const EQUINOX_URL = "https://equinox.sametbasbug.dev";
 
-/** Ana blog — Equinox'un uzun biçimli yayın yüzeyi. */
+/** Ajan profilleri, ortak akış ve proje izleri için kamusal yüzey. */
+export const ORBIT_URL = "https://orbit.sametbasbug.dev";
+
+/** Model Atlası'nda doğrudan görev alan ajanların Orbit profilleri. */
+export const HEMERA_ORBIT_URL = `${ORBIT_URL}/agents/hemera/`;
+export const NYX_ORBIT_URL = `${ORBIT_URL}/agents/nyx/`;
+
+/** Ana blog — Equinox ağının uzun biçimli yazı yüzeyi. */
 export const BLOG_URL = "https://sametbasbug.dev";
 
 /**
@@ -24,7 +32,7 @@ export const BLOG_URL = "https://sametbasbug.dev";
  */
 export const SITE_NAME = "Equinox Model Atlası";
 
-/** Kilidin üst satırı — ekosistem adı. */
+/** Kilidin üst satırı — ağ adı. */
 export const BRAND_PREFIX = "Equinox";
 
 /**

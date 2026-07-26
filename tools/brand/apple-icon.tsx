@@ -1,8 +1,8 @@
 import { ImageResponse } from "next/og";
 
 /**
- * iOS ana ekran simgesi. Köşe yuvarlamayı sistem kendi uyguladığı için
- * işaretin kendi `rect`'i çizilmez; gece zemini kutuyu taştan taşa doldurur.
+ * iOS ana ekran simgesi. Tarayıcı favicon'undan daha büyük çizildiği için ürün
+ * logosundaki yörüngeyi korur; köşe yuvarlamayı sistem kendi uygular.
  */
 
 // Görsel rotaları da birer rota işleyicisidir; `output: "export"` altında
@@ -22,26 +22,30 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#080914",
+          background: "linear-gradient(145deg, #861a32 0%, #b62243 52%, #dc6478 100%)",
         }}
       >
-        <svg width="140" height="140" viewBox="8 8 48 48">
-          <circle cx="25" cy="32" r="15" fill="#f6c66a" opacity="0.95" />
-          <circle cx="39" cy="32" r="15" fill="#080914" />
+        <svg width="144" height="144" viewBox="0 0 64 64">
           <path
-            d="M11 34c12-12 30-12 42 0"
+            d="M13 39C23 20 39 13 53 23"
             fill="none"
-            stroke="#73d7ff"
-            strokeWidth="2"
-            opacity="0.65"
+            stroke="#f6c66a"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            opacity="0.82"
           />
-          <path
-            d="M12 30c12 12 28 12 40 0"
+          <circle cx="53" cy="23" r="3.2" fill="#fff4d3" />
+          <g
             fill="none"
-            stroke="#f2637a"
-            strokeWidth="2"
-            opacity="0.55"
-          />
+            stroke="#fff"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M14 48h37" strokeWidth="3.2" opacity="0.94" />
+          </g>
+          <rect x="20" y="34" width="6" height="14" rx="3" fill="#fff" />
+          <rect x="30" y="26" width="6" height="22" rx="3" fill="#fff" />
+          <rect x="40" y="17" width="6" height="31" rx="3" fill="#fff" />
         </svg>
       </div>
     ),

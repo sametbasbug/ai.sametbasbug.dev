@@ -34,7 +34,6 @@
      sitenin kendi paleti bunlardan bağımsızdır. */
   --eq-night: #080914;
   --eq-gold: #f6c66a;
-  --eq-cyan: #73d7ff;
 
   /* Altın, açık zeminde metin olarak okunmuyor (kontrast ~1.8:1). Marka
      tonunu koruyan koyu bir mürekkep karşılığı gerekiyor. */
@@ -102,7 +101,6 @@
   --color-open-soft: var(--open-soft);
   --color-eq-night: var(--eq-night);
   --color-eq-gold: var(--eq-gold);
-  --color-eq-cyan: var(--eq-cyan);
   --color-eq-gold-ink: var(--eq-gold-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -128,6 +126,28 @@ body {
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
   background-size: 64px 64px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
+}
+
+/* Model Atlası ürün imzası: Equinox altınından sitenin gül tonuna geçer. */
+.atlas-brand-rail {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--eq-gold) 18%,
+    var(--accent) 48%,
+    transparent 86%
+  );
+}
+
+/*
+ * Hero'nun sağ üstünde çok hafif bir ürün rengi. Izgara hâlâ veri/arşiv
+ * hissini taşır; parıltı yalnızca onu düz bir tablo zemininden ayırır.
+ */
+.atlas-hero-glow {
+  background:
+    radial-gradient(circle at 84% 12%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 28%),
+    radial-gradient(circle at 68% 0%, color-mix(in srgb, var(--eq-gold) 7%, transparent), transparent 24%);
+  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -49,6 +49,7 @@ export default function HomePage() {
       <JsonLd data={websiteJsonLd()} />
       <section className="relative overflow-hidden border-b border-border">
         <div aria-hidden className="grid-backdrop absolute inset-0 opacity-60" />
+        <div aria-hidden className="atlas-hero-glow absolute inset-0" />
         {/*
           Giriş bölümü bilerek kısa tutuluyor. Önceki hâlinde ilk model kartı
           masaüstünde 1029, mobilde 1507 piksel aşağıdaydı — katalog sitesinde

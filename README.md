@@ -4,8 +4,8 @@ Türkçe yapay zekâ modeli keşif ve karşılaştırma sitesi. Kullanıcılar m
 sağlayıcı, yetenek, lisans ve bağlam penceresine göre filtreler; dörde kadar
 modeli yan yana karşılaştırır; her model için Türkçe bir detay sayfası okur.
 
-Site, Samet Başbuğ'un [Equinox](https://equinox.sametbasbug.dev) ekosistemindeki
-yayın yüzeylerinden biridir.
+Site, Samet Başbuğ'un [Equinox](https://equinox.sametbasbug.dev) ağındaki
+ürünlerden biridir.
 
 ## Çalıştırma
 
@@ -61,7 +61,7 @@ src/
     hesaplayici/page.tsx     Maliyet hesaplayıcı
     saglayicilar/page.tsx    Sağlayıcı özetleri
     hakkinda/page.tsx        Site, veri politikası ve ekosistem bağı
-    icon.svg                 Favicon (Equinox işareti)
+    icon.svg                 Küçük ölçekte sadeleştirilmiş ürün favicon'u
     opengraph-image.png      Paylaşım görseli — üretilmiş, depoya işlenir
     apple-icon.png           iOS ana ekran simgesi — üretilmiş
   components/
@@ -70,10 +70,10 @@ src/
     ModelCard.tsx            Kart görünümündeki tek model kartı
     CompareView.tsx          Karşılaştırma tablosu ve model ekleme
     CostCalculator.tsx       Maliyet hesaplayıcının formu ve sonuç tablosu
-    EquinoxMark.tsx          Marka işareti (başlık, altbilgi, hakkında)
+    ModelAtlasMark.tsx       Ayrıntılı ürün işareti (arayüz yüzeyleri)
     ThemeToggle.tsx          Açık/koyu tema düğmesi
     JsonLd.tsx               Yapılandırılmış veriyi sayfaya gömer
-    ui.tsx                   Badge, ProviderTag, Stat
+    ui.tsx                   Badge, LicenseBadge, Stat
   data/
     types.ts                 Model ve Provider tipleri
     models.ts                ⭐ Tüm model verisi burada
@@ -128,23 +128,28 @@ ve `ProviderId` birleşim tipine kimliğini ekleyin.
 
 ## Marka
 
-Görsel kimlik ekosistemden **devralınmadı**, yalnızca marka bağı taşındı.
+Görsel kimlik ağdan **kopyalanmadı**, ürün ailesi mantığıyla kuruldu.
 Equinox'un kendi sayfası koyu ve atmosferiktir; Model Atlası ise fiyat sütunları
-ve karşılaştırma tabloları olan veri yoğun bir sitedir. Ortak olan işaret, altın
-vurgu ve ad kilidi — zemin paleti değil.
+ve karşılaştırma tabloları olan veri yoğun bir sitedir. Aile bağı ortak ana
+favicon'u çoğaltarak değil; ad kilidi, altın yörünge/düğüm ve ürünlere özgü
+renkli işaret sistemiyle kurulur.
 
-Ekosistem bağının durduğu yerler:
+Equinox ağı bağının durduğu yerler:
 
-- **İşaret** — güneş/ay tutulması ve iki yörünge yayı. Geometri
-  `equinox.sametbasbug.dev`'deki işaretle aynıdır; tek fark alttaki yayın rengi
-  (hub'da menekşe, burada sitenin kendi vurgu tonu) — böylece sekmede hub'la
-  karışmaz. Aynı çizim dört yerde durur: [EquinoxMark.tsx](src/components/EquinoxMark.tsx),
-  `app/icon.svg` ve `tools/brand/` altındaki iki üreteç. Biri değişirse hepsi
-  değişmeli.
+- **Ürün işareti** — gül tonlu kutu içindeki karşılaştırma/veri sütunları,
+  Equinox hub'ındaki Model Atlası kartından gelir. Ayrıntılı sürümde altın bir
+  çizgi hem yükselen veri hattı hem de yörünge gibi okunur; düğümü Equinox
+  ailesiyle bağı kurar. [ModelAtlasMark.tsx](src/components/ModelAtlasMark.tsx),
+  `tools/brand/` altındaki OG ve Apple üreteçleri bu ayrıntılı sürümü taşır.
+- **Favicon** — `app/icon.svg`, aynı sembolün 16–32 piksel için sadeleştirilmiş
+  biçimidir. İnce yörünge ve parıltı bu ölçekte çamurlaşacağı için bilerek
+  çıkarılmıştır. Favicon ile büyük logo aynı dosyanın küçültülmüş kopyası
+  değildir.
 - **Ad kilidi** — başlıkta "EQUINOX" üstte küçük ve altın, "Model Atlası" altta
   baskın. Tam ad `SITE_NAME` sabitindedir ve tüm başlık/OG etiketlerini besler.
-- **Renkler** — Equinox altın/camgöbeği değerleri `globals.css` içinde
-  `--eq-*` belirteçleri olarak durur ve yalnızca marka yüzeylerinde kullanılır.
+- **Renkler** — Equinox altını ile Model Atlası'nın gül tonu yalnızca marka
+  rayı, ürün işareti ve küçük ağ bağlarında buluşur; veri yüzeyleri
+  sitenin kendi nötr paletini korur.
 
 Adlar ve adresler tek bir yerde: [src/lib/brand.ts](src/lib/brand.ts).
 

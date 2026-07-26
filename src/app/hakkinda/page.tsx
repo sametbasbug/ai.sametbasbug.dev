@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { EquinoxMark } from "@/components/EquinoxMark";
+import { ModelAtlasMark } from "@/components/ModelAtlasMark";
 import { JsonLd } from "@/components/JsonLd";
 import { models } from "@/data/models";
 import { providers } from "@/data/providers";
@@ -8,6 +8,9 @@ import {
   BLOG_URL,
   BRAND_PREFIX_UPPER,
   EQUINOX_URL,
+  HEMERA_ORBIT_URL,
+  NYX_ORBIT_URL,
+  ORBIT_URL,
   SITE_NAME,
 } from "@/lib/brand";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
@@ -15,7 +18,7 @@ import { breadcrumbJsonLd } from "@/lib/jsonld";
 export const metadata: Metadata = {
   title: "Hakkında",
   description:
-    "Model Atlası'nın ne olduğu, verinin nereden geldiği ve Equinox ekosistemindeki yeri.",
+    "Model Atlası'nın ne olduğu, verinin nereden geldiği ve Equinox ağındaki yeri.",
   alternates: { canonical: "/hakkinda/" },
 };
 
@@ -83,20 +86,20 @@ export default function AboutPage() {
 
         <section className="rounded-xl border border-border bg-surface p-6">
           <div className="flex items-center gap-3">
-            <EquinoxMark className="h-10 w-10 shrink-0" />
+            <ModelAtlasMark className="h-11 w-11 shrink-0" />
             <div>
               <p className="font-mono text-[10px] font-semibold leading-none tracking-[0.18em] text-eq-gold-ink">
-                {BRAND_PREFIX_UPPER}
+                {BRAND_PREFIX_UPPER} AĞI
               </p>
               <h2 className="mt-1.5 text-xl font-semibold leading-none tracking-tight">
-                Ekosistem
+                Ağdaki yeri
               </h2>
             </div>
           </div>
           <p className="mt-4 leading-relaxed text-text-muted">
-            {SITE_NAME}, Samet Başbuğ&apos;un Equinox adını taşıyan küçük web
-            ekosistemindeki yayın yüzeylerinden biridir. Ekosistemdeki diğer
-            yüzeylerin güncel listesi Equinox giriş sayfasında durur.
+            {SITE_NAME}, Samet Başbuğ&apos;un Equinox ağındaki ürünlerden
+            biridir. Equinox ağın ana kapısıdır; Orbit ise ailenin profillerini,
+            ortak akışını ve proje izlerini taşıyan kamusal yüzeydir.
           </p>
           <ul className="mt-5 divide-y divide-border border-t border-border">
             <li>
@@ -106,12 +109,28 @@ export default function AboutPage() {
                 rel="noopener noreferrer"
                 className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3 transition-colors hover:text-accent"
               >
-                <span className="text-sm font-medium">Equinox</span>
+                <span className="text-sm font-medium">Equinox ana kapısı</span>
                 <span className="text-xs text-text-faint">
-                  Ekosistemin giriş sayfası
+                  Ağdaki bütün yüzeyler
                 </span>
                 <span className="ml-auto text-xs text-text-muted">
                   equinox.sametbasbug.dev ↗
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={ORBIT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-wrap items-baseline gap-x-3 gap-y-1 py-3 transition-colors hover:text-accent"
+              >
+                <span className="text-sm font-medium">Orbit</span>
+                <span className="text-xs text-text-faint">
+                  Aile, ortak akış ve ajan profilleri
+                </span>
+                <span className="ml-auto text-xs text-text-muted">
+                  orbit.sametbasbug.dev ↗
                 </span>
               </a>
             </li>
@@ -132,6 +151,38 @@ export default function AboutPage() {
               </a>
             </li>
           </ul>
+
+          <div className="mt-6 border-t border-border pt-5">
+            <h3 className="text-sm font-semibold text-text">Bu projede</h3>
+            <p className="mt-2 text-sm leading-relaxed text-text-muted">
+              Model Atlası&apos;nın ürün ve teknik inşasını Hemera; görsel
+              kimliğini ve Equinox ağına bağını Nyx üstleniyor.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <a
+                href={HEMERA_ORBIT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-border bg-bg px-4 py-3 transition-colors hover:border-accent/40 hover:bg-surface-2"
+              >
+                <span className="block text-sm font-semibold">Hemera</span>
+                <span className="mt-1 block text-xs text-text-muted">
+                  Ürün ve teknik inşa · Orbit profili ↗
+                </span>
+              </a>
+              <a
+                href={NYX_ORBIT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-lg border border-border bg-bg px-4 py-3 transition-colors hover:border-accent/40 hover:bg-surface-2"
+              >
+                <span className="block text-sm font-semibold">Nyx</span>
+                <span className="mt-1 block text-xs text-text-muted">
+                  Görsel kimlik ve ağ bağı · Orbit profili ↗
+                </span>
+              </a>
+            </div>
+          </div>
         </section>
 
         <section>
