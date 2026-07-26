@@ -6,6 +6,7 @@ import { models } from "@/data/models";
 import { providers } from "@/data/providers";
 import type { Capability, License, ProviderId } from "@/data/types";
 import { formatContext } from "@/lib/format";
+import { useHydrated } from "@/lib/hydrated";
 import { capabilityLabels } from "@/lib/labels";
 import { MAX_COMPARE } from "@/lib/constants";
 import { sortModels, sortOptions, type SortKey } from "@/lib/sort";
@@ -29,6 +30,19 @@ const licenseOptions: { value: License | "tumu"; label: string }[] = [
 
 const allCapabilities = Object.keys(capabilityLabels) as Capability[];
 
+/**
+ * Bir kerede gösterilen model sayısı ve her "daha fazla" basışında eklenen
+ * miktar. Amaç altbilgiyi erişilebilir tutmak: katalog büyüdükçe sayfa
+ * sonsuza uzarsa altbilgideki düzeltme kanalı, veri tazeliği ve ağ
+ * bağlantıları fiilen ulaşılamaz hâle gelir.
+ *
+ * Kırpma yalnızca hidrasyondan sonra uygulanır — sunucu çıktısı tam listeyi
+ * içerir. Böylece JavaScript çalışmayan okuyucu ve arama motorları her modeli
+ * görür; kırpma da görünür alanın çok altında olduğu için kullanıcı bir
+ * sıçrama fark etmez.
+ */
+const SAYFA = 20;
+
 export function ModelExplorer() {
   const [query, setQuery] = useState("");
   const [activeProviders, setActiveProviders] = useState<Set<ProviderId>>(
@@ -45,6 +59,8 @@ export function ModelExplorer() {
   // Kart görünümü özet metni gösterdiği için keşif için duruyor.
   const [view, setView] = useState<View>("liste");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [limit, setLimit] = useState(SAYFA);
+  const hydrated = useHydrated();
 
   const toggleFrom = <T,>(set: Set<T>, value: T): Set<T> => {
     const next = new Set(set);
@@ -148,6 +164,12 @@ export function ModelExplorer() {
   };
 
   const compareHref = `/karsilastir/?m=${selected.join("&m=")}`;
+
+  // Filtre değişince sınır bilerek sıfırlanmıyor: "daha fazla göster" demiş
+  // bir kullanıcı için listenin her filtre dokunuşunda yeniden kısalması
+  // kendi verdiği kararın geri alınması gibi görünür.
+  const shown = hydrated ? visible.slice(0, limit) : visible;
+  const remaining = visible.length - shown.length;
 
   return (
     <div className="pb-28">
@@ -300,9 +322,24 @@ export function ModelExplorer() {
           değil, çünkü altındaki sayaç zaten ne olduğunu söylüyor. */}
       <h2 className="sr-only">Model listesi</h2>
       <div className="mt-5 flex items-baseline justify-between">
+        {/* Kırpma varken yalnızca toplamı yazmak yanıltıcı olurdu: kullanıcı
+            listenin sonuna geldiğinde eksik model olduğunu anlamalı. */}
         <p className="text-sm text-text-muted" aria-live="polite">
-          <strong className="font-semibold text-text">{visible.length}</strong>{" "}
-          model listeleniyor
+          {remaining > 0 ? (
+            <>
+              <strong className="font-semibold text-text">
+                {visible.length}
+              </strong>{" "}
+              modelden {shown.length} tanesi listeleniyor
+            </>
+          ) : (
+            <>
+              <strong className="font-semibold text-text">
+                {visible.length}
+              </strong>{" "}
+              model listeleniyor
+            </>
+          )}
         </p>
         {hasFilters ? (
           <button
@@ -325,7 +362,7 @@ export function ModelExplorer() {
       ) : view === "liste" ? (
         <div className="mt-3">
           <ModelList
-            models={visible}
+            models={shown}
             selected={selected}
             maxSelected={MAX_COMPARE}
             sort={sort}
@@ -335,7 +372,7 @@ export function ModelExplorer() {
         </div>
       ) : (
         <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map((model) => (
+          {shown.map((model) => (
             <ModelCard
               key={model.slug}
               model={model}
@@ -348,6 +385,23 @@ export function ModelExplorer() {
           ))}
         </div>
       )}
+
+      {remaining > 0 ? (
+        <div className="mt-5 flex flex-col items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => setLimit((current) => current + SAYFA)}
+            className="rounded-lg border border-border bg-surface px-5 py-2.5 text-sm font-medium transition-colors hover:border-border-strong hover:bg-surface-2"
+          >
+            {remaining <= SAYFA
+              ? `Kalan ${remaining} modeli göster`
+              : `${SAYFA} model daha göster`}
+          </button>
+          {remaining > SAYFA ? (
+            <p className="text-xs text-text-faint">{remaining} model kaldı</p>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* --------------------------------------------- karşılaştırma çubuğu */}
       {selected.length > 0 ? (

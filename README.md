@@ -384,6 +384,12 @@ eşleşmiyor, dolayısıyla atlama bağlantısı görünmez sanılabiliyor. İki
 doğru denetim, derlenmiş CSS'te `focus\:not-sr-only:focus` kuralının
 `.sr-only`'den sonra geldiğini doğrulamak.
 
+Üçüncü bir tuzak kaydırmayla ilgili: önizleme panelinde `window.scrollTo()`
+sayfayı kaydırır ama **`scroll` olayı yaymaz**, `behavior: "smooth"` ise hiç
+kaydırmaz. Kaydırmaya bağlı davranışı (örneğin başa dön düğmesini) orada
+sınarsanız çalışmıyor sanırsınız. Doğru denetim gerçek fare tekerleğiyle
+kaydırmak veya sayfayı gerçek bir tarayıcıda açmak.
+
 ## Ziyaretçi ölçümü
 
 Çerezsiz ve kimliksiz bir sayaç kullanılır (Cloudflare Web Analytics).
@@ -414,6 +420,18 @@ Betiğe `type="module"` eklemeyin: Cloudflare panelde snippet'i öyle veriyor am
   açıkça belirtilmiş öğeleri (`row-start-1`) otomatik yerleşenlerden önce
   yerleştirir; ızgarayı dar ekranda kullanınca seçim düğmesi ilk sütunu kapıp
   model adını sağa itiyordu.
+- **Dar ekranda başlık iki satır.** 375 px'te menü tek başına 300 px, marka
+  yazısı 85 px istiyor; tek satırda 88 px taşıyordu. Marka yazısı önceden
+  `min-[420px]` eşiğine bağlıydı ve yaygın telefonların hepsi (390, 393, 402)
+  o eşiğin altında olduğu için ad fiilen hiçbir telefonda görünmüyordu.
+  Alternatif hamburger menüydü; dört bağlantı için bir tıklama maliyeti ve
+  JS'e bağımlı bir menü, ikinci satırın 31 pikseline değmedi.
+- **Liste varsayılan olarak ilk 20 modeli gösterir**, gerisi düğmeyle açılır.
+  Katalog büyüdükçe altbilgideki düzeltme kanalı ve veri tazeliği fiilen
+  ulaşılamaz hâle geliyordu: 38 modelde altbilgi mobilde 5.337 px'teydi.
+  Kırpma yalnızca hidrasyondan sonra uygulanır — sunucu çıktısı tam listeyi
+  içerir, yani arama motorları ve JavaScript çalışmayan okuyucu her modeli
+  görür. Kırpma görünür alanın çok altında olduğu için sıçrama fark edilmez.
 - **Binlik kısaltma "K"**, "B" değil. Türkçe okuyucu "B"yi "bin", İngilizce
   okuyucu "billion" olarak okuyabildiği için belirsizdi.
 - **Sayılarda daktilo fontu yerine `tabular-nums`**. Sabit genişlikli fontta

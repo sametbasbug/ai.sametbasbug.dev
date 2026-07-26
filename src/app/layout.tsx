@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
+import { BackToTop } from "@/components/BackToTop";
 import { DataFreshness } from "@/components/DataFreshness";
 import { InlineScript } from "@/components/InlineScript";
 import { ModelAtlasMark } from "@/components/ModelAtlasMark";
@@ -113,21 +114,27 @@ export default function RootLayout({
 
         <header className="sticky top-0 z-40 border-b border-border bg-bg/88 backdrop-blur">
           <div aria-hidden className="atlas-brand-rail h-0.5" />
-          {/* 375 px genişlikte dört bağlantı, tema düğmesi ve işaret aynı
-              satıra ancak sığıyor: boşluk ve yazı boyutu sm altında bilerek
-              küçültülüyor. Menüye beşinci bir bağlantı eklenecekse önce bu
-              genişlik ölçülmeli. */}
-          <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-6 sm:px-6">
+          {/*
+           * Dar ekranda başlık iki satır: üstte marka ve tema düğmesi, altta
+           * menü. Tek satıra sığmıyor — ölçüldü, 375 px'te menü tek başına
+           * 300 px yiyor, marka yazısı 85 px daha istiyor, 88 px taşıyordu.
+           * Eskiden yazı `min-[420px]` eşiğine bağlıydı; yaygın telefonların
+           * hepsi (390, 393, 402) o eşiğin altında olduğu için marka adı
+           * fiilen hiçbir telefonda görünmüyordu.
+           *
+           * Sarma `flex-wrap` ile yapılıyor: menü `w-full` olduğu için dar
+           * ekranda kendi satırına düşer, `sm` üstünde `w-auto` olup aynı
+           * satıra döner. Tema düğmesi `sm:order-last` ile geniş ekranda
+           * menünün sağına geçer — bu yüzden `nav` içinde değil, dışında.
+           */}
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center px-4 sm:flex-nowrap sm:gap-6 sm:px-6">
             <Link
               href="/"
-              className="group flex items-center gap-2.5 rounded-md"
+              className="group flex h-14 items-center gap-2.5 rounded-md sm:h-16"
               aria-label={`${SITE_NAME} ana sayfa`}
             >
-              <ModelAtlasMark className="h-9 w-9 shrink-0 transition-transform duration-200 group-hover:-rotate-2 group-hover:scale-[1.03] min-[420px]:h-10 min-[420px]:w-10" />
-              {/* Dar ekranda üç menü öğesiyle birlikte sığmıyor. `sr-only`
-                  kullanılıyor, `hidden` değil: gizliyken de bağlantının
-                  erişilebilir adı olarak kalıyor. */}
-              <span className="sr-only whitespace-nowrap min-[420px]:not-sr-only">
+              <ModelAtlasMark className="h-9 w-9 shrink-0 transition-transform duration-200 group-hover:-rotate-2 group-hover:scale-[1.03] sm:h-10 sm:w-10" />
+              <span className="whitespace-nowrap">
                 <span className="block font-mono text-[9px] font-semibold leading-none tracking-[0.2em] text-eq-gold-ink">
                   {BRAND_PREFIX_UPPER}
                 </span>
@@ -137,17 +144,28 @@ export default function RootLayout({
               </span>
             </Link>
 
-            <nav aria-label="Ana menü" className="ml-auto flex items-center gap-0.5 sm:gap-1">
+            {/* `sm:ml-0` şart: menüde de `sm:ml-auto` var ve iki otomatik
+                kenar boşluğu artan yeri paylaşınca menü ile tema düğmesinin
+                arası geniş ekranda açılıyor. */}
+            <div className="ml-auto flex h-14 items-center sm:order-last sm:ml-0 sm:h-16">
+              <ThemeToggle />
+            </div>
+
+            <nav
+              aria-label="Ana menü"
+              className="flex w-full items-center gap-0.5 border-t border-border pb-1.5 sm:ml-auto sm:w-auto sm:gap-1 sm:border-0 sm:pb-0"
+            >
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="rounded-md px-1.5 py-2 text-xs text-text-muted transition-colors hover:bg-surface-2 hover:text-text sm:px-3 sm:text-sm"
+                  // Dar ekranda bağlantılar satırı eşit paylaşır: dokunma
+                  // hedefi büyür ve menü ortalanmış görünür.
+                  className="flex-1 rounded-md px-1.5 py-2 text-center text-xs text-text-muted transition-colors hover:bg-surface-2 hover:text-text sm:flex-none sm:px-3 sm:text-sm"
                 >
                   {link.label}
                 </Link>
               ))}
-              <ThemeToggle />
             </nav>
           </div>
         </header>
@@ -235,6 +253,7 @@ export default function RootLayout({
           </div>
         </footer>
 
+        <BackToTop />
         <Analytics />
       </body>
     </html>

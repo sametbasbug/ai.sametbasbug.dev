@@ -1,8 +1,8 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
 import { formatDate } from "@/lib/format";
 import { daysSince, OLDEST_VERIFIED, STALE_AFTER_DAYS } from "@/lib/freshness";
+import { useHydrated } from "@/lib/hydrated";
 
 /**
  * Verinin kaç günlük olduğunu gösterir.
@@ -16,9 +16,6 @@ import { daysSince, OLDEST_VERIFIED, STALE_AFTER_DAYS } from "@/lib/freshness";
  * Tarihin kendisi sunucuda çiziliyor: JavaScript çalışmasa da okuyucu verinin
  * hangi güne ait olduğunu görür. Göreli yaş hidrasyondan sonra ekleniyor.
  */
-const noopSubscribe = () => () => {};
-const onClient = () => true;
-const onServer = () => false;
 
 /** "1 gün önce", "dün", "bugün". */
 function relativeAge(days: number): string {
@@ -28,7 +25,7 @@ function relativeAge(days: number): string {
 }
 
 export function DataFreshness({ className }: { className?: string }) {
-  const hydrated = useSyncExternalStore(noopSubscribe, onClient, onServer);
+  const hydrated = useHydrated();
   const days = hydrated ? daysSince(OLDEST_VERIFIED, new Date()) : null;
   const stale = days !== null && days > STALE_AFTER_DAYS;
 
