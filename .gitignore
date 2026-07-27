@@ -40,5 +40,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Claude Code yerel izin ayarları (makineye özel)
-.claude/settings.local.json
+# Claude Code yerel dosyaları (makineye özel)
+.claude/
